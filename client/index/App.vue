@@ -1,22 +1,71 @@
 <style>
+html, body {
+    min-height: 100%;
+}
+* {
+    padding: 0;
+    margin: 0;
+}
 body {
-  font-family: Helvetica, sans-serif;
+    min-height: 100vh;
+    overflow: hidden;
+    background: #f4f7f9;
+}
+#app {
+    min-height: 100%;
+}
+header {
+    background: #fff;
+    height: 4rem;
+    box-shadow: 0 0 .5rem #d0d0d0;
+    display: flex;
+}
+.logo-box {
+    min-width: 10rem;
+    text-align: center;
+    line-height: 4rem;
+    font-size: 1.5rem;
+    color: #565656;
+}
+.nav-box a {
+    text-decoration: none;
+    line-height: 4rem;
+    padding: 0 1rem;
+    color: #969696;
+    height: 4rem;
+    box-sizing: border-box;
+    display: inline-block;
+}
+.nav-box a.router-link-active {
+    border-bottom: 2px solid #ff9472;
+    color: #565656;
+}
+.view {
+    padding: 1rem;
 }
 </style>
-
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}inde</h1>
-  </div>
+    <div id="app">
+        <header>
+            <div class="logo-box">
+                Cov XSS
+            </div>
+            <nav class="nav-box">
+                <router-link to="/home">Home</router-link>
+                <router-link to="/project">Project</router-link>
+                <router-link to="/module">Module</router-link>
+                <router-link to="/screenshot">Screenshot</router-link>
+            </nav>
+        </header>
+        <router-view class="view"></router-view>
+    </div>
 </template>
-
 <script>
 export default {
-  data () {
-    return {
-      msg: 'Hello Vue!'
+    data() {
+        return {
+            msg: 'Hello Vue!'
+        }
     }
-  }
 }
 </script>

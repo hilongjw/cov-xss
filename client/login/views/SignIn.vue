@@ -169,8 +169,6 @@ export default {
 
             AV.User.logIn(this.form.username.value, this.form.password.value)
             .then(user => {
-                console.log(user)
-                this.notify('登陆成功！', 'success')
                 return this.$http.post('/sign-in', {
                     token: user._sessionToken
                 })
@@ -178,7 +176,14 @@ export default {
                 this.notify('用户名与密码不匹配')
             })
             .then(data => {
-                console.log('backend logined')        
+                this.notify('登陆成功！', 'success')
+                setTimeout(() => {
+                    location.href = '/'
+                }, 3000)       
+            })
+            .catch(err => {
+                console.log(err)
+                this.notify('服务器遇到一些问题。')
             })
         }
     }

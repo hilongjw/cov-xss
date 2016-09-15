@@ -16,7 +16,7 @@
     "express-session": "^1.14.1",
     "leancloud-storage": "^1.4.0",
     "multer": "^1.2.0",
-    "vue": "^2.0.0-rc.1"
+    "vue": "^2.0.0-rc.6"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -27,6 +27,7 @@
     "file-loader": "^0.8.4",
     "vue-loader": "^9.2.2",
     "vue-resource": "^1.0.2",
+    "vue-router": "^2.0.0-rc.5",
     "webpack": "^2.1.0-beta.20",
     "webpack-dev-middleware": "^1.7.0",
     "webpack-dev-server": "^2.1.0-beta.0",
