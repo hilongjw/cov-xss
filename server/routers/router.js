@@ -1,13 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
-const signUp = require('./signUp')
+const signUp = require('./sign').signUp
+const signIn = require('./sign').signIn
 
-router.get('/user/:id', function (req, res) {
-  res.send('OK 233')
-})
+const isLogin = require('./dash').isLogin
 
-router.get('/', function (req, res) {
+router.get('/', isLogin, function (req, res) {
   res.render('index', { title: 'index', bundle: 'index'})
 })
 
@@ -15,6 +14,7 @@ router.get('/login', function (req, res) {
   res.render('login', { title: 'login', bundle: 'login'})
 })
 
-router.post('/login', signUp)
+router.post('/sign-up', signUp)
+router.post('/sign-in', signIn)
 
 module.exports = router

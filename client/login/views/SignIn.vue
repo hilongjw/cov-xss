@@ -171,8 +171,14 @@ export default {
             .then(user => {
                 console.log(user)
                 this.notify('登陆成功！', 'success')
+                return this.$http.post('/sign-in', {
+                    token: user._sessionToken
+                })
             }, err => {
                 this.notify('用户名与密码不匹配')
+            })
+            .then(data => {
+                console.log('backend logined')        
             })
         }
     }

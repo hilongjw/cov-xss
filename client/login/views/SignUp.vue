@@ -96,7 +96,7 @@ export default {
         signUp () {
             if (!this.check()) return
 
-            this.$http.post('/login', {
+            this.$http.post('/sign-up', {
                 username: this.form.username.value,
                 password: this.form.password.value,
                 invitation: this.form.invitation.value

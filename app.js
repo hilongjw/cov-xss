@@ -3,7 +3,7 @@ const http = require('http')
 const express = require('express')
 
 const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const PORT = 8080
 const NODE_ENV = process.env.NODE_ENV || 'production'
@@ -17,11 +17,22 @@ global.AV = AV
 app.set('views', path.join(__dirname, 'server/views'))
 app.set('view engine', 'ejs')
 
-app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(router)
 
+app.use(session({
+  secret: 'sakjfbasfusfjkasduiasfjknaskfbajnsf89asfasn234hb',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 360000 }
+}))
+
+app.use(function(err, req, res, next) {
+    console.error(err.stack)
+    res.status(500).send({msg: 'Something broke!'})
+})
+
+app.use(router)
 
 if (isDev) {
     // local variables for all views

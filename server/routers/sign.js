@@ -86,4 +86,26 @@ function signUp (req, res) {
         })
 }
 
-module.exports = signUp
+function signIn (req, res) {
+    console.log(req.body.token)
+    AV.User.become(req.body.token)
+        .then(user => {
+            console.log('success', user)
+            req.session.token = req.body.token
+            req.session.user = user
+            console.log(req.session)
+            res.send({
+                error: false,
+                user: user
+            })
+        }, err => console.log)
+        .catch(err => {
+            res.send({
+                error: true,
+                msg: '233'
+            })
+        })
+}
+
+module.exports.signUp = signUp
+module.exports.signIn = signIn

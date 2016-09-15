@@ -13,6 +13,7 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.2",
     "express": "^4.14.0",
+    "express-session": "^1.14.1",
     "leancloud-storage": "^1.4.0",
     "multer": "^1.2.0",
     "vue": "^2.0.0-rc.1"
