@@ -89,11 +89,11 @@
         </div>
         <div class="content">
             <textfield :text="row" v-for="row in form"></textfield>
-            <info v-show="info.show" :msg="info.msg"></info>
+            <info v-show="info.show" :msg="info.msg" :type="info.type"></info>
         </div>
         <div class="footer">
             <div class="text-row action">
-                <button class="login-btn">
+                <button class="login-btn" @click="signUp">
                     SIGN IN
                 </button>
             </div>
@@ -113,7 +113,9 @@ export default {
         return {
             info: {
                 show: false,
-                msg: ''
+                type: '',
+                msg: '',
+                timer: null
             },
             form: {
                 username: {
@@ -121,6 +123,7 @@ export default {
                     value: ''
                 },
                 password: {
+                    type: 'password',
                     title: 'Password',
                     value: ''
                 }
@@ -134,6 +137,43 @@ export default {
     methods: {
         toggle () {
             this.$emit('toggle')
+        },
+        notify (msg, type) {
+            if (this.info.timer) {
+                clearTimeout(this.info.timer)
+                this.info.timer = null
+            }
+
+            this.info.msg = msg
+            this.info.type = type || ''
+            this.info.show = true
+
+            this.info.timer = setTimeout(() => {
+                this.info.show = false
+                this.info.timer = null
+            }, 5000)
+        },
+        check () {
+            let allDone = true
+            Object.keys(this.form).forEach((key) => {
+                console.log(this.form[key], key)
+                if (!this.form[key].value) {
+                    allDone = false
+                    this.notify(key + ' is must be required')
+                }
+            })
+            return allDone
+        },
+        signUp () {
+            if (!this.check()) return
+
+            AV.User.logIn(this.form.username.value, this.form.password.value)
+            .then(user => {
+                console.log(user)
+                this.notify('登陆成功！', 'success')
+            }, err => {
+                this.notify('用户名与密码不匹配')
+            })
         }
     }
 }

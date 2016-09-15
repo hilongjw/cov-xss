@@ -1,17 +1,27 @@
-const express = require('express')
 const path = require('path')
 const http = require('http')
+const express = require('express')
+
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 
 const PORT = 8080
 const NODE_ENV = process.env.NODE_ENV || 'production'
 const isDev = NODE_ENV === 'development';
 const app = express()
 const router = require('./server/routers/router')
+const AV = require('./config/leanCloudServer')
+
+global.AV = AV
 
 app.set('views', path.join(__dirname, 'server/views'))
 app.set('view engine', 'ejs')
 
+app.use(cookieParser())
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(router)
+
 
 if (isDev) {
     // local variables for all views

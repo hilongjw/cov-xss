@@ -95,16 +95,26 @@ export default {
         },
         signUp () {
             if (!this.check()) return
-                const user = new AV.User()
-                user.setUsername(this.form.username.value)
-                user.setPassword(this.form.password.value)
-                user.signUp()
-                    .then(loginedUser => {
-                        this.notify('注册成功！', 'success')
-                    }, (err) => {
-                        console.log(err)
-                        this.notify('遇到了一些问题...')
-                    })
+
+            this.$http.post('/login', {
+                username: this.form.username.value,
+                password: this.form.password.value,
+                invitation: this.form.invitation.value
+            })
+            .then(res => {
+                let data = res.data
+                if (data.error) {
+                    this.notify(data.msg)
+                } else {
+                    this.notify(data.msg, 'success')
+                    setTimeout(() => {
+                        this.toggle()
+                    }, 2000)
+                }
+            })
+            .catch(err => {
+                this.notify('服务器遇到了一些问题...')
+            })
         }
     }
 }
