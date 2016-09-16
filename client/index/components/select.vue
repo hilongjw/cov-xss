@@ -1,5 +1,6 @@
 <style>
     .select-wrapper {
+        position: relative;
         width: 100%;
     }
     .select-value {
@@ -7,7 +8,6 @@
         box-sizing: border-box;
         width: 100%;
         background: #fff;
-        padding: .25rem .5rem;
         min-height: 2rem;
         overflow-x: auto;
         border-bottom: 1px solid #ccc;
@@ -16,7 +16,9 @@
         display: inline-block;
         flex-shrink: 0;
         margin-right: .5rem;
-        padding: .25rem .5rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        padding: 0 .5rem;
         border: 1px solid #5edaa4;
         border-radius: .8rem;
         color: #5edaa4;
@@ -28,6 +30,8 @@
         margin-left: 1rem;
     }
     .select-options {
+        position: absolute;
+        width: 100%;
         background: #fff;
         box-shadow: 0 0 1rem #ccc;
         max-height: 18rem;

