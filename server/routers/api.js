@@ -41,5 +41,11 @@ function delAliasCache (req, res) {
     })
 }
 
+function getParams (req, res) {
+    console.log(req.connection.remoteAddress)
+    res.send([req.ip, req.headers['X-Real-IP'], req.connection.remoteAddress])
+}
+
 module.exports.getByAlias = getByAlias
 module.exports.delAliasCache = delAliasCache
+module.exports.getParams = getParams

@@ -4,10 +4,12 @@ const router = express.Router()
 const signUp = require('./sign').signUp
 const signIn = require('./sign').signIn
 
-const isLogin = require('./dash').isLogin
+const isLogin = require('./auth').isLogin
+const blackCheck = require('./auth').blackCheck
 
 const getByAlias = require('./api').getByAlias
 const delAliasCache = require('./api').delAliasCache
+const getParams = require('./api').getParams
 
 
 router.get('/', isLogin, function (req, res) {
@@ -23,8 +25,11 @@ router.post('/sign-up', signUp)
 router.post('/sign-in', signIn)
 
 // api
-router.all('/code', getByAlias)
-router.get('/code/fresh', delAliasCache)
+router.all('/code', blackCheck, getByAlias)
+router.get('/code/fresh', isLogin, delAliasCache)
+
+// get params
+router.get('/data', blackCheck, getParams)
 
 
 module.exports = router

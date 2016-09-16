@@ -9,13 +9,10 @@
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.production.js --progress --hide-modules"
   },
   "dependencies": {
-    "blueimp-md5": "^2.3.1",
     "body-parser": "^1.15.2",
-    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.2",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
-    "install": "^0.8.1",
     "leancloud-storage": "^1.4.0",
     "lru-cache": "^4.0.1",
     "md5": "^2.2.1",

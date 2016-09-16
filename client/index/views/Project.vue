@@ -179,8 +179,12 @@
                     <cov-select :select="select"></cov-select>
                 </div>
                 <div class="text-row" v-if="edit.alias">
-                    <div class="text-row-title">接口地址</div>
-                    <p>{{edit.alias}}</p>
+                    <div class="text-row-title">地址</div>
+                    <p>
+                        <a target="_blank" :href="serverUrl + '/code?id=' + edit.alias">
+                            {{serverUrl + '/code?id=' + edit.alias}}
+                        </a>
+                    </p>
                 </div>
                 <div v-if="edit.alias">
                     <p class="code-block">
@@ -203,6 +207,7 @@ import MD5 from 'md5'
 export default {
     data () {
         return {
+            serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
             list: [],
             edit: {
                 project: null,
@@ -295,10 +300,13 @@ export default {
             }
             return MD5(raw)
         },
+        inserParams (code, alias) {
+            return code.replace('{__projectId}', alias)
+        },
         genCode (alias, modules) {
             let result = ''
             modules.forEach(m => {
-                result += m.item.get('code')
+                result += this.inserParams(m.item.get('code'), alias)
             })
             return result
         },
@@ -316,7 +324,13 @@ export default {
             const Project = AV.Object.extend('Project')
             let alias = ''
             if (!current) {
+                let acl = new AV.ACL()
+                acl.setPublicReadAccess(false)
+                acl.setPublicWriteAccess(false)
+                acl.setWriteAccess(AV.User.current(), true)
+                acl.setReadAccess(AV.User.current(), true)
                 current = new Project()
+                current.setACL(acl)
                 alias = this.genAlias()
             } else {
                 alias = current.get('alias')

@@ -5,8 +5,9 @@ import VueResource from 'vue-resource'
 import App from './App.vue'
 import router from './router'
 import * as filters from './filters/index'
-import AV from '../../config/leancloud'
+import { AV, SERVER_CONFIG } from '../../config/config'
 
+window.SERVER_CONFIG = SERVER_CONFIG
 window.AV = AV
 
 Vue.use(VueRouter)
