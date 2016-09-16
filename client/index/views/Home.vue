@@ -1,5 +1,5 @@
 <style>
-.project-content {
+.home-content {
     display: flex;
 }
 .data-log-view {
@@ -99,7 +99,7 @@
 </style>
 
 <template>
-    <div class="project-content">
+    <div class="home-content">
         <project-list :list="list" :show-project="showProject"></project-list>
         <div class="data-log-view">
             <div class="card-title">
@@ -141,28 +141,14 @@
 </template>
 
 <script>
-import covSelect from '../components/select.vue'
 import ProjectList from '../components/projectList.vue'
 import ObjectView from '../components/ObjectView.vue'
-import MD5 from 'md5'
 
 export default {
     data () {
         return {
-            serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
             list: [],
-            dataLogList: [],
-            edit: {
-                project: null,
-                title: '',
-                summary: '',
-                alias: ''
-            },
-            select: {
-                remove: [],
-                value: [],
-                options: []
-            }
+            dataLogList: []
         }
     },
     mounted () {
@@ -170,7 +156,6 @@ export default {
         this.queryDataLog()
     },
     components: {
-        covSelect,
         ProjectList,
         ObjectView
     },
@@ -199,6 +184,7 @@ export default {
                 .then(list => {
                     this.dataLogList = list
                 })
-        }    }
+        }
+    }
 } 
 </script>

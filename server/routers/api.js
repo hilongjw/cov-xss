@@ -48,8 +48,8 @@ function getParams (req, res) {
         msg: 'id is must be required'
     })
 
-    if (LRUCache.has(cacheKey(req.query.id, 'getParams'))) {
-        return saveDataLog(req, res, LRUCache.get(cacheKey(req.query.id, 'getParams')))
+    if (LRUCache.has(cacheKey(req.query.id, 'alias-user'))) {
+        return saveDataLog(req, res, LRUCache.get(cacheKey(req.query.id, 'alias-user')))
     }
 
     const projectQuery = new AV.Query('Project')
@@ -57,7 +57,7 @@ function getParams (req, res) {
     projectQuery.first()
         .then(project => {
             if (project) {
-                LRUCache.set(cacheKey(req.query.id, 'getParams'), project.get('creator'))
+                LRUCache.set(cacheKey(req.query.id, 'alias-user'), project.get('creator'))
                 saveDataLog(req, res, project.get('creator'))
             } else {
                 res.send({
@@ -92,7 +92,7 @@ function saveDataLog (req, res, user) {
     dataLog.set('header', req.headers)
 
     // acl
-    let acl = new AV.ACL()
+    const acl = new AV.ACL()
     acl.setPublicReadAccess(false)
     acl.setPublicWriteAccess(false)
     acl.setWriteAccess(user, true)
@@ -112,6 +112,67 @@ function saveDataLog (req, res, user) {
     })
 }
 
+function getScreenshot (req, res) {
+    if (!req.body.file || !req.body.id) return res.send({
+        error: true,
+        msg: 'file and id are must be required'
+    })
+
+    if (LRUCache.has(cacheKey(req.body.id, 'alias-user'))) {
+        return saveScreenshot(req, res, LRUCache.get(cacheKey(req.body.id, 'alias-user')))
+    }
+
+    const projectQuery = new AV.Query('Project')
+    projectQuery.equalTo('alias', req.body.id)
+    projectQuery.first()
+        .then(project => {
+            if (project) {
+                LRUCache.set(cacheKey(req.body.id, 'alias-user'), project.get('creator'))
+                saveScreenshot(req, res, project.get('creator'))
+            } else {
+                res.send({
+                    error: true,
+                    msg: 'invalid id'
+                })
+            }
+        })
+
+}
+
+function saveScreenshot (req, res, user) {
+    const data = { base64: req.body.file.substring(23) }
+    const file = new AV.File('screenshot-' + (new Date()).getTime() + '.jpg', data)
+
+    file.save()
+        .then(savedFile => {
+            const Screenshot = AV.Object.extend('Screenshot')
+            const screenshot = new Screenshot()
+
+            // acl
+            const acl = new AV.ACL()
+            acl.setPublicReadAccess(false)
+            acl.setPublicWriteAccess(false)
+            acl.setWriteAccess(user, true)
+            acl.setReadAccess(user, true)
+            screenshot.setACL(acl)
+            screenshot.set('file', savedFile)
+            screenshot.set('alias', req.body.id)
+            return screenshot.save()
+        })
+        .then(sc => {
+            res.send({
+                error: false
+            })
+        })
+        .catch(err => {
+            console.log('Error at saveScreenshot: ', err)
+            res.send({
+                error: true
+            })
+        })
+}
+
 module.exports.getByAlias = getByAlias
 module.exports.delAliasCache = delAliasCache
 module.exports.getParams = getParams
+module.exports.getScreenshot = getScreenshot

@@ -27,6 +27,7 @@
     "cross-env": "^1.0.6",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.4",
+    "html2canvas": "^0.5.0-beta4",
     "vue-loader": "^9.2.2",
     "vue-resource": "^1.0.2",
     "vue-router": "^2.0.0-rc.5",
