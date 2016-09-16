@@ -34,18 +34,26 @@
     color: #51d79d;
     outline: none;
 }
+.card-title-btn.common {
+    color: #777777;
+    border: 1px solid #777777;
+}
+.card-title-btn.disable {
+    color: #ccc;
+    border: 1px solid #ccc;
+}
 .module-list {
     list-style: none;
-    padding: 0 1rem;
 }
 .module-list-item {
     color: #868686;
-    padding: .75rem .5rem;
-    border-bottom: 1px solid #ccc;
+    padding: .75rem 1rem;
+    border-left: 4px solid #CDDC39;
+    margin-bottom: .5rem; 
     cursor: pointer;
 }
 .module-list-item:hover {
-    opacity: .6;
+    background-color: #eee;
 }
 .item-title {
     margin-bottom: .5rem;
@@ -63,12 +71,18 @@
     margin-left: 1rem;
     box-shadow: 0 0 .5rem #d0d0d0;
 }
+.module-edit-title-box {
+    width: 100%;
+    padding-right: 1rem;
+    margin-right: 1rem;
+}
 .module-edit-title {
     border: none;
     border-bottom: 1px solid #ccc;
     outline: none;
     font-size: 1rem;
     padding: .2rem .5rem;
+    width: 100%;
 }
 .module-edit-content {
     height: calc(100% - 6rem);
@@ -83,14 +97,18 @@
     color: #717171;
     outline: none;
 }
+.module-edit-action {
+    text-align: right;
+    flex-shrink: 0;
+}
 </style>
 
 <template>
     <div class="module-content">
         <div class="card">
             <div class="card-title">
-                <span>私有模块</span>
-                <button class="card-title-btn">新增</button>
+                <span>模块</span>
+                <!-- <button class="card-title-btn">新增</button> -->
             </div>
             <div class="card-content">
                 <ul class="module-list">
@@ -100,10 +118,10 @@
                         </div> 
                         <div class="item-other">
                             <div class="item-quote">
-                                掘金抓包专用
+                                <span class="module-tag">JS</span>
                             </div>
                             <div class="item-date">
-                                一天前
+                                {{item.updatedAt | timeAgo}}
                             </div>
                         </div>
                     </li>
@@ -112,11 +130,13 @@
         </div>
         <div class="module-edit">
             <div class="card-title">
-                <div>
+                <div class="module-edit-title-box">
                     <input type="text" placeholder="模块标题" class="module-edit-title" v-model="edit.title">   
                 </div>
-                <button class="card-title-btn" @click="clearEdit" v-show="edit.current">取消编辑</button>
-                <button class="card-title-btn" @click="saveAction">保存</button>
+                <div class="module-edit-action">
+                    <button class="card-title-btn common" @click="clearEdit" v-show="edit.current">取消编辑</button>
+                    <button class="card-title-btn" :class="{ 'disable': (!edit.title || !edit.code) }" @click="saveAction">{{edit.current ? '保存' : '创建'}}</button>
+                </div>
             </div>
             <div class="module-edit-content">
                 <textarea class="module-edit-textarea" v-model="edit.code"></textarea>
@@ -138,7 +158,6 @@ export default {
         }
     },
     mounted () {
-        console.log('?')
         this.queryList()
     },
     methods: {
@@ -155,12 +174,14 @@ export default {
         queryList () {
             const query = new AV.Query('Module')
             query.equalTo('creator', AV.User.current())
+            query.include('creator')
             query.find()
                 .then(list => {
                     this.list = list
                 })
         },
         saveAction () {
+            if (!this.edit.title || !this.edit.code) return
             this.create(this.edit.title, this.edit.code, this.edit.current)
         },
         create (title, code, current) {

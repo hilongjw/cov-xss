@@ -4,15 +4,22 @@ const express = require('express')
 
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const LRU = require("lru-cache")
+const LruOptions = {
+    max: 500,
+    length: function (n, key) { return n.length * 2 + key.length },
+    maxAge: 1000 * 60 * 60
+}
 
+const app = express()
 const PORT = 8080
 const NODE_ENV = process.env.NODE_ENV || 'production'
 const isDev = NODE_ENV === 'development';
-const app = express()
 const router = require('./server/routers/router')
 const AV = require('./config/leanCloudServer')
 
 global.AV = AV
+global.LRUCache = LRU(LruOptions)
 
 app.set('views', path.join(__dirname, 'server/views'))
 app.set('view engine', 'ejs')

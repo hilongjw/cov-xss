@@ -1,3 +1,4 @@
+<style src="./assets/_ionicicon.css"></style>
 <style>
 html, body {
     min-height: 100%;
@@ -8,7 +9,6 @@ html, body {
 }
 body {
     min-height: 100vh;
-    overflow: hidden;
     background: #f4f7f9;
 }
 #app {
