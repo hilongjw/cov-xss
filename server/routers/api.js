@@ -1,5 +1,6 @@
 const CACHE_KEY_MAP = {
-    'alias': '__PROJECT__ALIAS'
+    'alias': '__PROJECT__ALIAS',
+    'getParams': '__DATA__LOG__USER'
 }
 
 function cacheKey (key, type) {
@@ -42,8 +43,73 @@ function delAliasCache (req, res) {
 }
 
 function getParams (req, res) {
-    console.log(req.connection.remoteAddress)
-    res.send([req.ip, req.headers['X-Real-IP'], req.connection.remoteAddress])
+    if (!req.query.id) return res.send({
+        error: true,
+        msg: 'id is must be required'
+    })
+
+    if (LRUCache.has(cacheKey(req.query.id, 'getParams'))) {
+        return saveDataLog(req, res, LRUCache.get(cacheKey(req.query.id, 'getParams')))
+    }
+
+    const projectQuery = new AV.Query('Project')
+    projectQuery.equalTo('alias', req.query.id)
+    projectQuery.first()
+        .then(project => {
+            if (project) {
+                LRUCache.set(cacheKey(req.query.id, 'getParams'), project.get('creator'))
+                saveDataLog(req, res, project.get('creator'))
+            } else {
+                res.send({
+                    error: true,
+                    msg: 'invalid id'
+                })
+            }
+        })
+        
+}
+
+function saveDataLog (req, res, user) {
+    const DataLog = AV.Object.extend('DataLog')
+    const dataLog = new DataLog()
+
+    if (req.query.id) {
+        dataLog.set('alias', req.query.id)
+    }
+    if (Object.keys(req.query).length) {
+        dataLog.set('get', req.query)
+    }
+    if (Object.keys(req.body).length) {
+        dataLog.set('post', req.body)
+    }
+    if (req.query.cookie) {
+        dataLog.set('cookie', req.query.cookie)
+    }
+    if (req.body.cookie) {
+        dataLog.set('cookie', req.body.cookie)
+    }
+    dataLog.set('ip', req.connection.remoteAddress)
+    dataLog.set('header', req.headers)
+
+    // acl
+    let acl = new AV.ACL()
+    acl.setPublicReadAccess(false)
+    acl.setPublicWriteAccess(false)
+    acl.setWriteAccess(user, true)
+    acl.setReadAccess(user, true)
+    dataLog.setACL(acl)
+
+    dataLog.save().then(log => {
+        res.send({
+            error: false
+        })
+    })
+    .catch(err => {
+        console.log('Error at getParams: ', err)
+        res.send({
+            error: true
+        })
+    })
 }
 
 module.exports.getByAlias = getByAlias

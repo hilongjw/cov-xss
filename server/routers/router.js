@@ -29,7 +29,7 @@ router.all('/code', blackCheck, getByAlias)
 router.get('/code/fresh', isLogin, delAliasCache)
 
 // get params
-router.get('/data', blackCheck, getParams)
+router.all('/data', blackCheck, getParams)
 
 
 module.exports = router
