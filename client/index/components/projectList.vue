@@ -68,7 +68,7 @@
     <div class="project-list-card">
         <div class="card-title">
             <span>项目</span>
-            <button class="card-title-btn" @click="showNew">创建</button>
+            <button class="card-title-btn" v-if="showNew" @click="showNew">创建</button>
         </div>
         <div class="card-content">
             <ul class="project-list">

@@ -100,7 +100,7 @@
 
 <template>
     <div class="project-content">
-        <project-list :list="list" :show-new="showNew" :show-project="showProject"></project-list>
+        <project-list :list="list" :show-project="showProject"></project-list>
         <div class="data-log-view">
             <div class="card-title">
                 <div class="data-log-title-box">
@@ -175,8 +175,6 @@ export default {
         ObjectView
     },
     methods: {
-        showNew () {
-        },
         showProject (item) {
             this.queryDataLog(item.get('alias'))
         },
@@ -201,76 +199,6 @@ export default {
                 .then(list => {
                     this.dataLogList = list
                 })
-        },
-        saveAction () {
-            if (!this.edit.title || !this.edit.summary) return
-            this.create(this.edit.title, this.edit.summary, this.select.value, this.select.remove, this.edit.project)
-        },
-        genAlias () {
-            let raw = Math.random() * (new Date()).getTime()
-            if (window.performance) {
-                raw += window.performance.timing.connectEnd
-            }
-            return MD5(raw)
-        },
-        inserParams (code, alias) {
-            return code.replace('{__projectId}', alias)
-        },
-        genCode (alias, modules) {
-            let result = ''
-            modules.forEach(m => {
-                result += this.inserParams(m.item.get('code'), alias)
-            })
-            return result
-        },
-        delCache (id) {
-            this.$http.get('/code/fresh', {
-                params: {
-                    id: id
-                }
-            })
-            .then(res => {
-                console.log('mission success')
-            })
-        },
-        create (title, summary, modules, removed, current) {
-            const Project = AV.Object.extend('Project')
-            let alias = ''
-            if (!current) {
-                let acl = new AV.ACL()
-                acl.setPublicReadAccess(false)
-                acl.setPublicWriteAccess(false)
-                acl.setWriteAccess(AV.User.current(), true)
-                acl.setReadAccess(AV.User.current(), true)
-                current = new Project()
-                current.setACL(acl)
-                alias = this.genAlias()
-            } else {
-                alias = current.get('alias')
-            }
-
-            let moduleRlt = current.relation('Module')
-
-            removed.forEach(m => {
-                moduleRlt.remove(m.item)
-            })
-            modules.forEach(m => {
-                moduleRlt.add(m.item)
-            })
-            
-            current.save({
-                title: title,
-                summary: summary,
-                alias: alias,
-                code: this.genCode(alias, modules),
-                creator: AV.User.current()
-            })
-            .then(module => {
-                this.edit.alias = alias
-                this.queryList()
-                this.delCache(alias)
-            })
-        }
-    }
+        }    }
 } 
 </script>
