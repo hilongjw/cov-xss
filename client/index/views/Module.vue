@@ -108,7 +108,7 @@
         <div class="card">
             <div class="card-title">
                 <span>模块</span>
-                <!-- <button class="card-title-btn">新增</button> -->
+                <button class="card-title-btn" @click="clearEdit">新增</button>
             </div>
             <div class="card-content">
                 <ul class="module-list">

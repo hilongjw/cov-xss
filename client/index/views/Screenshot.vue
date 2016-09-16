@@ -2,6 +2,28 @@
 .screenshot-content {
     display: flex;
 }
+.screenshot-list {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+.screenshot-item {
+    position: relative;
+    width: 32.333333%;
+    background: #fff;
+    padding: .5rem;
+    box-shadow: 0 0 1rem #ccc;
+    margin: .5%;
+    box-sizing: border-box;
+    text-align: center;
+}
+.screenshot-box {
+    height: 0;
+    background-size: cover;
+    padding-bottom: 100%;
+}
 </style>
 
 <template>
@@ -18,7 +40,17 @@
             </div>
             <div class="module-edit-content">
                 <button @click="test">233</button>
-                <img v-for="screenshot in screenshotList" :src="screenshot.get('file').thumbnailURL(500, 1000)" alt="">
+                <ul class="screenshot-list">
+                    <li class="screenshot-item" v-for="screenshot in screenshotList">
+                        <div 
+                            class="screenshot-box" 
+                            :style="{
+                                'background-image': `url(${screenshot.get('file').thumbnailURL(500, 1000)})`
+                            }">
+                        </div>
+                    </li>
+                </ul>
+                <img src="x">
             </div>
         </div>
     </div>

@@ -28,7 +28,10 @@ app.set('views', path.join(__dirname, 'server/views'))
 app.set('view engine', 'ejs')
 app.enable('trust proxy')
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({
+    limit: '5mb',
+    extended: true
+}))
 
 app.use(session({
   secret: 'sakjfbasfusfjkasduiasfjknaskfbajnsf89asfasn234hb',
@@ -41,6 +44,19 @@ app.use(function(err, req, res, next) {
     console.error(err.stack)
     res.status(500).send({msg: 'Something broke!'})
 })
+
+app.all('*',function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+  res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+
+  if (req.method == 'OPTIONS') {
+    res.send(200); /让options请求快速返回/
+  }
+  else {
+    next();
+  }
+});
 
 app.use(router)
 

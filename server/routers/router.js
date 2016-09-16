@@ -6,6 +6,7 @@ const signIn = require('./sign').signIn
 
 const isLogin = require('./auth').isLogin
 const blackCheck = require('./auth').blackCheck
+const crossOrigin = require('./auth').crossOrigin
 
 const getParams = require('./api').getParams
 const getByAlias = require('./api').getByAlias
@@ -30,9 +31,9 @@ router.all('/code', blackCheck, getByAlias)
 router.get('/code/fresh', isLogin, delAliasCache)
 
 // get params
-router.all('/api/data', blackCheck, getParams)
+router.all('/api/data', crossOrigin, blackCheck, getParams)
 
 //screenshot
-router.post('/api/screenshot', blackCheck, getScreenshot)
+router.post('/api/screenshot', crossOrigin, getScreenshot)
 
 module.exports = router
