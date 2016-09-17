@@ -29,7 +29,7 @@ module.exports = {
             test: /\.(png|jpg|gif|svg|ttf|woff|eot)$/,
             loader: 'file',
             query: {
-                name: '[name].[ext]?[hash]'
+                name: 'files/[name].[ext]'
             }
         }]
     },

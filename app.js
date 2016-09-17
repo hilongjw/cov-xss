@@ -7,11 +7,11 @@ const session = require('express-session')
 const LRU = require("lru-cache")
 
 const app = express()
-const SERVER_CONFIG = require('./config/config').SERVER_CONFIG
-const NODE_ENV = process.env.NODE_ENV || 'production'
-const isDev = NODE_ENV === 'development';
+const AV = require('./config/config').AV
 const router = require('./server/routers/router')
-const AV = require('./config/leanCloudServer')
+const NODE_ENV = process.env.NODE_ENV || 'production'
+const isDev = NODE_ENV === 'development'
+const SERVER_CONFIG = require('./config/config').SERVER_CONFIG
 
 global.AV = AV
 global.LRUCache = LRU({
