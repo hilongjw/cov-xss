@@ -72,7 +72,12 @@
         </div>
         <div class="card-content">
             <ul class="project-list">
-                <li class="project-list-item" v-for="item in list" @click="showProject(item)">
+                <li 
+                    class="project-list-item" 
+                    v-for="item in list" 
+                    @click="showProject(item)"
+                    :style="{ 'border-color': item.get('color') }"
+                >
                     <div class="item-title">
                         {{item.get('title')}}
                     </div> 

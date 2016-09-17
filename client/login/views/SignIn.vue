@@ -56,7 +56,7 @@
     background: none;
     text-align: center;
     width: 100%;
-    background: #51d79d;
+    background: linear-gradient(30deg, #53db9d, #46b9ae);
     font-size: 1.2rem;
     color: #fff;
     outline: none;

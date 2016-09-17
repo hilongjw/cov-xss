@@ -74,16 +74,7 @@
 </template>
 
 <script>
-const catIn = function (target, parent) {
-    let path = []
-    let parentNode = target
-    while (parentNode && parentNode !== document.body) {
-        path.push(parentNode)
-        parentNode = parentNode.parentNode
-    }
-    return path.indexOf(parent) !== -1
-}
-
+import { catIn } from '../utils'
 export default {
     props: {
         select: Object

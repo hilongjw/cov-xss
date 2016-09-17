@@ -14,7 +14,7 @@ body {
 }
 #app {
     min-height: 100%;
-    background: linear-gradient(45deg, #50d59a, #4ac5a7);
+    background: linear-gradient(30deg, #53db9d, #46b9ae);
 }
 .in-out-translate-fade-enter-active, .in-out-translate-fade-leave-active {
   transition: all .5s;

@@ -76,7 +76,8 @@
         <div class="project-new project-view">
             <div class="card-title">
                 <div class="project-new-title-box">
-                    {{edit.title}}
+                    <color-picker :color="edit.color"></color-picker>
+                    {{edit.title ? edit.title : '新建项目'}} 
                 </div>
                 <div class="project-new-action">
                     <button class="card-title-btn" @click="saveAction">保存</button>
@@ -96,10 +97,18 @@
                     <cov-select :select="select"></cov-select>
                 </div>
                 <div class="text-row" v-if="edit.alias">
-                    <div class="text-row-title">地址</div>
+                    <div class="text-row-title">代码地址</div>
                     <p>
                         <a target="_blank" :href="serverUrl + '/code?id=' + edit.alias">
                             {{serverUrl + '/code?id=' + edit.alias}}
+                        </a>
+                    </p>
+                </div>
+                <div class="text-row" v-if="edit.alias">
+                    <div class="text-row-title">数据接口</div>
+                    <p>
+                        <a target="_blank" :href="serverUrl + '/api/data?id=' + edit.alias">
+                            {{serverUrl + '/api/data?id=' + edit.alias}}
                         </a>
                     </p>
                 </div>
@@ -120,6 +129,7 @@
 <script>
 import covSelect from '../components/select.vue'
 import ProjectList from '../components/projectList.vue'
+import ColorPicker from '../components/colorPicker.vue'
 import MD5 from 'md5'
 
 export default {
@@ -128,6 +138,9 @@ export default {
             serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
             list: [],
             edit: {
+                color: {
+                    value: '#CDDC39'
+                },
                 project: null,
                 title: '',
                 summary: '',
@@ -146,7 +159,8 @@ export default {
     },
     components: {
         covSelect,
-        ProjectList
+        ProjectList,
+        ColorPicker
     },
     methods: {
         showNew () {
@@ -154,11 +168,13 @@ export default {
             this.edit.title = ''
             this.edit.summary = ''
             this.edit.alias = ''
+            this.edit.color.value = ''
             this.select.value = []
             this.select.remove = []
         },
         showProject (item) {
             this.edit.project = item
+            this.edit.color.value = item.get('color') ? item.get('color') : '#46b9ae'
             this.edit.title = item.get('title')
             this.edit.summary = item.get('summary')
             this.edit.alias = item.get('alias')
@@ -265,6 +281,7 @@ export default {
             })
             
             current.save({
+                color: this.edit.color.value,
                 title: title,
                 summary: summary,
                 alias: alias,
