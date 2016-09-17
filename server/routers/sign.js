@@ -89,12 +89,10 @@ function signUp (req, res) {
 function signIn (req, res) {
     AV.User.become(req.body.token)
         .then(user => {
-            console.log('success', user)
             req.session.token = req.body.token
             req.session.user = user
             res.send({
-                error: false,
-                user: user
+                error: false
             })
         })
         .catch(err => {
