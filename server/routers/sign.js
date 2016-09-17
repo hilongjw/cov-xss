@@ -71,7 +71,7 @@ function signUp (req, res) {
         })
         .then(user => {
             loginedUser = user
-            invitationCode.set('used', false)
+            invitationCode.set('used', true)
             return invitationCode.save()
         })
         .then(() => {
@@ -87,18 +87,16 @@ function signUp (req, res) {
 }
 
 function signIn (req, res) {
-    console.log(req.body.token)
     AV.User.become(req.body.token)
         .then(user => {
             console.log('success', user)
             req.session.token = req.body.token
             req.session.user = user
-            console.log(req.session)
             res.send({
                 error: false,
                 user: user
             })
-        }, err => console.log)
+        })
         .catch(err => {
             res.send({
                 error: true,

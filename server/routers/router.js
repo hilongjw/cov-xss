@@ -34,6 +34,6 @@ router.get('/code/fresh', isLogin, delAliasCache)
 router.all('/api/data', crossOrigin, blackCheck, getParams)
 
 //screenshot
-router.post('/api/screenshot', crossOrigin, getScreenshot)
+router.post('/api/screenshot', crossOrigin, blackCheck, getScreenshot)
 
 module.exports = router
