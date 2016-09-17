@@ -68,6 +68,15 @@
     font-size: .8rem;
     margin-bottom: 1rem;
 }
+.project-code-textarea {
+    height: 20rem;
+    width: 100%;
+    border: 1px solid #e8e8e8;
+    background: #f7f7f7;
+    line-height: 1.7;
+    color: #717171;
+    outline: none;
+}
 </style>
 
 <template>
@@ -95,6 +104,10 @@
                 <div class="text-row">
                     <div class="text-row-title">模块</div>
                     <cov-select :select="select"></cov-select>
+                </div>
+                <div class="text-row">
+                    <div class="text-row-title">代码</div>
+                    <textarea class="project-code-textarea" v-model="edit.followCode"></textarea>
                 </div>
                 <div class="text-row" v-if="edit.alias">
                     <div class="text-row-title">代码地址</div>
@@ -144,6 +157,7 @@ export default {
                 project: null,
                 title: '',
                 summary: '',
+                code: '',
                 alias: ''
             },
             select: {
@@ -167,6 +181,7 @@ export default {
             this.edit.project = null
             this.edit.title = ''
             this.edit.summary = ''
+            this.edit.followCode = ''
             this.edit.alias = ''
             this.edit.color.value = ''
             this.select.value = []
@@ -176,6 +191,7 @@ export default {
             this.edit.project = item
             this.edit.color.value = item.get('color') ? item.get('color') : '#46b9ae'
             this.edit.title = item.get('title')
+            this.edit.followCode = item.get('followCode') || ''
             this.edit.summary = item.get('summary')
             this.edit.alias = item.get('alias')
 
@@ -243,6 +259,7 @@ export default {
             modules.forEach(m => {
                 result += this.inserParams(m.item.get('code'), alias)
             })
+            result += this.inserParams(this.edit.followCode, alias)
             return result
         },
         delCache (id) {
@@ -285,13 +302,15 @@ export default {
                 title: title,
                 summary: summary,
                 alias: alias,
+                followCode: this.edit.followCode,
                 code: this.genCode(alias, modules),
                 creator: AV.User.current()
             })
-            .then(module => {
+            .then(project => {
                 this.edit.alias = alias
                 this.queryList()
                 this.delCache(alias)
+                this.$Notify('success', title + ' 保存成功', '', 3000)
             })
         }
     }

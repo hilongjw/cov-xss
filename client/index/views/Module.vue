@@ -197,7 +197,7 @@ export default {
                 creator: AV.User.current()
             })
             .then(module => {
-                console.log(module)
+                this.$Notify('success', title + ' 保存成功', '', 3000)
                 this.queryList()
             })
         }

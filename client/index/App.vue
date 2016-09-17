@@ -94,15 +94,20 @@ header {
                 <router-link to="/screenshot">Screenshot</router-link>
             </nav>
         </header>
+        <notification></notification>
         <router-view class="view"></router-view>
     </div>
 </template>
 <script>
+import Notification from './components/Notification.vue'
 export default {
     data() {
         return {
             msg: 'Hello Vue!'
         }
+    },
+    components: {
+        Notification
     }
 }
 </script>
