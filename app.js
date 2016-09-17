@@ -11,7 +11,7 @@ const AV = require('./config/config').AV
 const router = require('./server/routers/router')
 const NODE_ENV = process.env.NODE_ENV || 'production'
 const isDev = NODE_ENV === 'development'
-const SERVER_CONFIG = require('./config/config').SERVER_CONFIG
+const SERVER_CONFIG = require('./config/config').SERVER_CONFIG[NODE_ENV]
 
 global.AV = AV
 global.LRUCache = LRU({

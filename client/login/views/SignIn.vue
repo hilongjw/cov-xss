@@ -178,7 +178,7 @@ export default {
             .then(data => {
                 this.notify('登陆成功！', 'success')
                 setTimeout(() => {
-                    location.href = '/'
+                    location.href = '/#/home'
                 }, 3000)       
             })
             .catch(err => {

@@ -7,7 +7,8 @@ import router from './router'
 import * as filters from './filters/index'
 import { AV, SERVER_CONFIG } from '../../config/config'
 
-window.SERVER_CONFIG = SERVER_CONFIG
+const NODE_ENV = process.env.NODE_ENV || 'development'
+window.SERVER_CONFIG = SERVER_CONFIG[NODE_ENV]
 window.AV = AV
 
 Vue.use(VueRouter)
