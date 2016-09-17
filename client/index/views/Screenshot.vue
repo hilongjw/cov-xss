@@ -102,14 +102,12 @@ export default {
                 })
         },
         openRaw (item) {
-            console.log(item.get('file'))
             window.open(item.get('file').get('url'))
         },
         test () {
             html2canvas(document.body)
             .then(canvas => {
                 let base64 = canvas.toDataURL('image/jpeg')
-                console.log(base64.substring(22))
                 return this.$http.post('api/screenshot', {
                     file: base64,
                     id: '5f8f327fe17dcfab074f468ca1fe70e4'

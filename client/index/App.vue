@@ -2,6 +2,8 @@
 <style>
 html, body {
     min-height: 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 * {
     padding: 0;
@@ -27,6 +29,10 @@ header {
     font-size: 1.5rem;
     color: #565656;
 }
+.nav-box {
+    overflow-x: auto;
+    display: flex;
+}
 .nav-box a {
     text-decoration: none;
     line-height: 4rem;
@@ -42,6 +48,37 @@ header {
 }
 .view {
     padding: 1rem;
+}
+@media all and (max-width: 768px) {
+    #app .logo-box {
+        font-size: 1rem;
+        min-width: 6rem;
+    }
+    .view {
+        flex-wrap: wrap;
+    }
+    .view .project-list-card,
+    .view .module-card {
+        width: 100%;
+        height: 100%;
+    }
+    .view .data-log-view,
+    .view .project-view,
+    .view .module-edit {
+        width: 100%;
+        margin: 0;
+        margin-top: 1rem;
+        padding-bottom: 2rem;
+    }
+    .view .module-edit-textarea {
+            min-height: 20rem;
+    }
+    .view .data-log-params {
+        display: initial;
+    }
+    .view .screenshot-item {
+        width: 100%;
+    }
 }
 </style>
 <template>

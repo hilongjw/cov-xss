@@ -2,7 +2,7 @@
 .module-content {
     display: flex;
 }
-.card {
+.module-card {
     position: relative;
     display: inline-block;
     width: 20rem;
@@ -105,7 +105,7 @@
 
 <template>
     <div class="module-content">
-        <div class="card">
+        <div class="module-card">
             <div class="card-title">
                 <span>模块</span>
                 <button class="card-title-btn" @click="clearEdit">新增</button>

@@ -85,7 +85,7 @@
                 <img src="../assets/logo.svg" class="logo">
             </div>
             <h1>Welcome to Cov Xss</h1>
-            <p>xss platform base on Vuejs</p>
+            <p>a simple xss platform</p>
         </div>
         <div class="content">
             <textfield :text="row" v-for="row in form"></textfield>
@@ -156,7 +156,6 @@ export default {
         check () {
             let allDone = true
             Object.keys(this.form).forEach((key) => {
-                console.log(this.form[key], key)
                 if (!this.form[key].value) {
                     allDone = false
                     this.notify(key + ' is must be required')

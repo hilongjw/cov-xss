@@ -32,6 +32,7 @@ function getByAlias (req, res) {
 }
 
 function delAliasCache (req, res) {
+    console.log(req.query)
     if (!req.query.id) return res.send({
         error: true,
         msg: 'id is must be required'

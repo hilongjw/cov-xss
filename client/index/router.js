@@ -9,14 +9,12 @@ const router = new VueRouter({
     mode: 'hash',
     base: __dirname,
     routes: [
+        { path: '/', redirect: '/home'},
         { path: '/home', component: Home },
         { path: '/module', component: Module },
         { path: '/project', component: Project },
         { path: '/screenshot', component: Screenshot }
-    ],
-    redirect: {
-        '/': '/home'
-    }
+    ]
 })
 
 export default router

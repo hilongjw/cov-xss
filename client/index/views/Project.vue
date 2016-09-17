@@ -21,6 +21,9 @@
     padding: .2rem .5rem;
     width: 100%;
 }
+.project-new-action {
+    flex-shrink: 0;
+}
 .project-new-content {
     height: calc(100% - 6rem);
     padding: 0 1rem;
