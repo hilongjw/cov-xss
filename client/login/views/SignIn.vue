@@ -88,12 +88,12 @@
             <p>a simple xss platform</p>
         </div>
         <div class="content">
-            <textfield :text="row" v-for="row in form"></textfield>
+            <textfield :text="row" v-for="row in form" @enter-key="signIn"></textfield>
             <info v-show="info.show" :msg="info.msg" :type="info.type"></info>
         </div>
         <div class="footer">
             <div class="text-row action">
-                <button class="login-btn" @click="signUp">
+                <button class="login-btn" @click="signIn">
                     SIGN IN
                 </button>
             </div>
@@ -163,7 +163,7 @@ export default {
             })
             return allDone
         },
-        signUp () {
+        signIn () {
             if (!this.check()) return
 
             AV.User.logIn(this.form.username.value, this.form.password.value)
@@ -175,10 +175,11 @@ export default {
                 this.notify('用户名与密码不匹配')
             })
             .then(data => {
+                if (!data) return this.notify('用户名与密码不匹配')
                 this.notify('登陆成功！', 'success')
                 setTimeout(() => {
                     location.href = '/#/home'
-                }, 3000)       
+                }, 2000)       
             })
             .catch(err => {
                 console.log(err)

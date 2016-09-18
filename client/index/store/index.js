@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { AV } from '../../../config/config'
 
 Vue.use(Vuex)
 
 const state = {
+    User: AV.User.current(),
     Notifications: [],
     ProgressBar: {
         timer: null,

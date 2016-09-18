@@ -103,5 +103,14 @@ function signIn (req, res) {
         })
 }
 
+function logOut (req, res) {
+    req.session.destroy((err) => {
+        res.send({
+            error: false
+        })
+    })
+}
+
 module.exports.signUp = signUp
 module.exports.signIn = signIn
+module.exports.logOut = logOut

@@ -17,7 +17,7 @@ global.AV = AV
 global.LRUCache = LRU({
     max: 500,
     length: function (n, key) { return n.length * 2 + key.length },
-    maxAge: 1000 * 60 * 60 * 6
+    maxAge: 1000 * 60 * 60
 })
 global.BlackCache = LRU({
     max: 100,
@@ -37,7 +37,7 @@ app.use(session({
   secret: 'sakjfbasfusfjkasduiasfjknaskfbajnsf89asfasn234hb',
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: 360000 }
+  cookie: { maxAge: 3600000 }
 }))
 
 app.use(function(err, req, res, next) {

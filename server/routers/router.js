@@ -1,8 +1,10 @@
+'use strict'
 const express = require('express')
 const router = express.Router()
 
 const signUp = require('./sign').signUp
 const signIn = require('./sign').signIn
+const logOut = require('./sign').logOut
 
 const isLogin = require('./auth').isLogin
 const blackCheck = require('./auth').blackCheck
@@ -25,6 +27,7 @@ router.get('/login', function (req, res) {
 // login api
 router.post('/sign-up', signUp)
 router.post('/sign-in', signIn)
+router.post('/log-out', isLogin, logOut)
 
 // api
 router.all('/code', blackCheck, getByAlias)

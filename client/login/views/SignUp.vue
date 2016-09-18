@@ -13,7 +13,7 @@
             <p>a simple xss platform</p>
         </div>
         <div class="content">
-            <textfield :text="row" v-for="row in form"></textfield>
+            <textfield :text="row" v-for="row in form" @enter-key="signUp"></textfield>
             <info v-show="info.show" :msg="info.msg" :type="info.type"></info>
         </div>
         <div class="footer">

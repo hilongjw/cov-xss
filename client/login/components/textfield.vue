@@ -4,7 +4,7 @@
             {{text.title}}
         </div>
         <div class="text-input">
-            <input :type="text.type || 'text'" v-model="text.value">
+            <input :type="text.type || 'text'" v-model="text.value" @keyup.enter="keyEnter">
         </div>
     </div>
 </template>
@@ -13,6 +13,11 @@
     export default {
         props: {
             text: Object
+        },
+        methods: {
+            keyEnter () {
+                this.$emit('enter-key')
+            }
         }
     }
 </script>

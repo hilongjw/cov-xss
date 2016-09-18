@@ -32,6 +32,7 @@ header {
 .nav-box {
     overflow-x: auto;
     display: flex;
+    width: 100%;
 }
 .nav-box a {
     text-decoration: none;
@@ -124,6 +125,7 @@ header {
                 <router-link to="/module">Module</router-link>
                 <router-link to="/screenshot">Screenshot</router-link>
             </nav>
+            <nav-user></nav-user>
         </header>
         <notification></notification>
         <progress-bar></progress-bar>
@@ -133,9 +135,16 @@ header {
 <script>
 import Notification from './components/Notification.vue'
 import ProgressBar from './components/ProgressBar.vue'
+import NavUser from './components/NavUser.vue'
 
 export default {
+    computed: {
+        user () {
+            return this.$store.state.User
+        }
+    },
     components: {
+        NavUser,
         ProgressBar,
         Notification
     }
