@@ -49,6 +49,37 @@ header {
 .view {
     padding: 1rem;
 }
+@-webkit-keyframes loading {
+  from {
+    transform-origin: 50% 50%;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform-origin: 50% 50%;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes loading {
+  from {
+    transform-origin: 50% 50%;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform-origin: 50% 50%;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.icon-loading {
+    display: inline-block;
+    animation: loading 1s infinite linear;
+}
 @media all and (max-width: 768px) {
     #app .logo-box {
         font-size: 1rem;

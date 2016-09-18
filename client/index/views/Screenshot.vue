@@ -54,8 +54,14 @@
                             }">
                         </div>
                     </li>
-                    <div class="screenshot-list-state" v-show="state.loading || state.noMore">
-                        {{ state.loading ? '加载中' : '已全部加载'}}
+                    <div class="screenshot-list-state" v-show="state.loading">
+                        加载中
+                    </div>
+                    <div class="screenshot-list-state" v-if="!screenshotList.length">
+                        这里什么都没有
+                    </div>
+                    <div class="screenshot-list-state" v-if="state.noMore">
+                        已全部加载
                     </div>
                 </ul>
             </div>

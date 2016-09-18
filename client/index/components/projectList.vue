@@ -4,7 +4,6 @@
     position: relative;
     display: inline-block;
     width: 20rem;
-    height: calc(100vh - 6rem);
     background: #fff;
     border-radius: 2px;
     padding: 0 0 1rem 0;

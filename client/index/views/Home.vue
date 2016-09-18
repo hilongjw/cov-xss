@@ -28,7 +28,7 @@
 </style>
 
 <template>
-    <div class="home-content">
+    <div class="home-content" v-load-more="{ method: loadMoreDataLog }" >
         <project-list :list="list" :show-project="showProject"></project-list>
         <div class="data-log-view">
             <div class="card-title">
@@ -39,9 +39,7 @@
                     <!-- <button class="card-title-btn" @click="saveAction">保存</button> -->
                 </div>
             </div>
-            <div class="module-edit-content" v-load-more="{ method: loadMoreDataLog }">
-                <data-log :data-log-list="dataLogList"></data-log>
-            </div>
+            <data-log :data-log-list="dataLogList" :state="state"></data-log>
         </div>
     </div>
 </template>
@@ -56,6 +54,7 @@ export default {
     data () {
         return {
             state: {
+                noMore: false,
                 loading: false
             },
             query: {
@@ -105,23 +104,32 @@ export default {
                 .find()
                 .then(list => {
                     this.$Progress.finished()
-                    this.dataLogList = list
+                    this.dataLogList = list.map(item => {
+                        item['__show'] = false
+                        return item
+                    })
                 })
                 .catch(err => {
                     this.$Progress.failed()
                 })
         },
         loadMoreDataLog () {
-            if (this.state.loading) return
+            if (this.state.loading || this.state.noMore) return
             this.$Progress.start()
             this.state.loading = true
             this.genDataLogQuery()
                 .skip(this.dataLogList.length)
                 .find()
                 .then(list => {
+                    if (list.length < 10) {
+                        this.state.noMore = true
+                    }
                     this.$Progress.finished()
                     this.state.loading = false
-                    this.dataLogList = this.dataLogList.concat(list)
+                    this.dataLogList = this.dataLogList.concat(list.map(item => {
+                        item['__show'] = false
+                        return item
+                    }))
                 })
                 .catch(err => {
                     this.state.loading = false
