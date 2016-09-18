@@ -172,12 +172,17 @@ export default {
             this.edit.title = ''
         },
         queryList () {
+            this.$Progress.start()
             const query = new AV.Query('Module')
             query.equalTo('creator', AV.User.current())
             query.include('creator')
             query.find()
                 .then(list => {
+                    this.$Progress.finished()
                     this.list = list
+                })
+                .catch(err => {
+                    this.$Progress.failed()
                 })
         },
         saveAction () {

@@ -39,9 +39,8 @@
                     <!-- <button class="card-title-btn" @click="saveAction">保存</button> -->
                 </div>
             </div>
-            <div class="module-edit-content">
+            <div class="module-edit-content" v-load-more="{ method: loadMoreDataLog }">
                 <data-log :data-log-list="dataLogList"></data-log>
-                <button @click="loadMoreDataLog">loadMoreDataLog</button>
             </div>
         </div>
     </div>
@@ -53,8 +52,12 @@ import ObjectView from '../components/ObjectView.vue'
 import DataLog from '../components/DataLog.vue'
 
 export default {
+    name: 'Home',
     data () {
         return {
+            state: {
+                loading: false
+            },
             query: {
                 alias: ''
             },
@@ -77,7 +80,7 @@ export default {
             if (this.query.alias) {
                 query.equalTo('alias', this.query.alias)
             }
-            query.limit(1)
+            query.limit(10)
             query.descending('createdAt')
             return query
         },
@@ -97,18 +100,33 @@ export default {
                 })
         },
         queryDataLog () {
+            this.$Progress.start()
             this.genDataLogQuery()
                 .find()
                 .then(list => {
+                    this.$Progress.finished()
                     this.dataLogList = list
+                })
+                .catch(err => {
+                    this.$Progress.failed()
                 })
         },
         loadMoreDataLog () {
+            if (this.state.loading) return
+            this.$Progress.start()
+            this.state.loading = true
             this.genDataLogQuery()
                 .skip(this.dataLogList.length)
                 .find()
                 .then(list => {
+                    this.$Progress.finished()
+                    this.state.loading = false
                     this.dataLogList = this.dataLogList.concat(list)
+                })
+                .catch(err => {
+                    this.state.loading = false
+                    this.$Progress.failed()
+                    console.log(err)
                 })
         }
     }

@@ -16,6 +16,10 @@ Array.prototype.$remove = function (item) {
     }
 }
 
+const errorHandler = (err) => {
+    console.log(err)
+}
+
 export {
     catIn
 }

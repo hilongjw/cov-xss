@@ -95,18 +95,17 @@ header {
             </nav>
         </header>
         <notification></notification>
+        <progress-bar></progress-bar>
         <router-view class="view"></router-view>
     </div>
 </template>
 <script>
 import Notification from './components/Notification.vue'
+import ProgressBar from './components/ProgressBar.vue'
+
 export default {
-    data() {
-        return {
-            msg: 'Hello Vue!'
-        }
-    },
     components: {
+        ProgressBar,
         Notification
     }
 }
