@@ -2,7 +2,6 @@
 .obj-view {
     display: flex;
     background: #f9f9f9;
-    margin-bottom: 1rem;
     width: 100%;
     word-break: break-all;
     overflow: visible;

@@ -1,6 +1,6 @@
 <style>
 .module-edit {
-    width: 100%;
+    width: calc(100% - 21rem);
     background: #fff;
     margin-left: 1rem;
     box-shadow: 0 0 .5rem #d0d0d0;
@@ -35,6 +35,9 @@
     text-align: right;
     flex-shrink: 0;
 }
+.module-edit-content .CodeMirror {
+    height: 100%;
+}
 </style>
 
 <template>
@@ -49,17 +52,26 @@
             </div>
         </div>
         <div class="module-edit-content">
-            <textarea class="module-edit-textarea" v-model="edit.code"></textarea>
+            <code-editor :edit="edit"></code-editor>
         </div>
     </div>
 </template>
 
 <script>
+import CodeEditor from './CodeEditor.vue'
 export default {
+    data () {
+        return {
+            editor: null
+        }
+    },
     props: {
         edit: Object,
         clearEdit: Function,
         saveAction: Function
+    },
+    components: {
+        CodeEditor
     }
 }
 </script>

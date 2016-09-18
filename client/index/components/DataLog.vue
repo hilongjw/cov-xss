@@ -7,7 +7,7 @@
 }
 .data-log-item {
     margin-bottom: 1rem;
-    box-shadow: 0 0 1rem #efefef;
+    box-shadow: 0 0 .3rem #efefef;
     padding: .5rem;
 }
 .data-log-params {
