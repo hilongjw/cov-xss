@@ -107,7 +107,12 @@
                 </div>
                 <div class="text-row">
                     <div class="text-row-title">代码</div>
-                    <textarea class="project-code-textarea" v-model="edit.followCode"></textarea>
+                    <code-editor 
+                        class="project-code-textarea"
+                        @code-change="codeChange"
+                        ref="codeEditor"
+                    ></code-editor>
+                    <!-- <textarea class="project-code-textarea" v-model="edit.followCode"></textarea> -->
                 </div>
                 <div class="text-row" v-if="edit.alias">
                     <div class="text-row-title">代码地址</div>
@@ -143,6 +148,7 @@
 import covSelect from '../components/select.vue'
 import ProjectList from '../components/projectList.vue'
 import ColorPicker from '../components/colorPicker.vue'
+import CodeEditor from '../components/CodeEditor.vue'
 import MD5 from 'md5'
 
 export default {
@@ -150,6 +156,9 @@ export default {
         return {
             serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
             list: [],
+            followCode: {
+                code: ''
+            },
             edit: {
                 color: {
                     value: '#CDDC39'
@@ -174,9 +183,16 @@ export default {
     components: {
         covSelect,
         ProjectList,
-        ColorPicker
+        ColorPicker,
+        CodeEditor
     },
     methods: {
+        codeChange (code) {
+            this.edit.followCode = code
+        },
+        newCode (code) {
+            this.$refs.codeEditor.$emit('new-code', code)
+        },
         showNew () {
             this.edit.project = null
             this.edit.title = ''
@@ -188,6 +204,7 @@ export default {
             this.select.remove = []
         },
         showProject (item) {
+            this.newCode(item.get('followCode') || '')
             this.edit.project = item
             this.edit.color.value = item.get('color') ? item.get('color') : '#46b9ae'
             this.edit.title = item.get('title')

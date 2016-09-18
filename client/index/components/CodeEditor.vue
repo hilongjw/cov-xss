@@ -6,16 +6,16 @@
 </template>
 
 <script>
-import CodeMirror from 'codemirror/'
+import CodeMirror from 'codemirror'
 import 'codemirror/mode/javascript/javascript.js'
 
 export default {
-    props: {
-        edit: Object
-    },
     data () {
         return {
-            coder: null
+            coder: null,
+            edit: {
+                code: ''
+            }
         }
     },
     mounted () {
@@ -25,16 +25,12 @@ export default {
             theme: 'material',
             indentWithTabs: true
         })
-        this.coder.on("change", () => {
-            this.edit.code = this.coder.getValue()
+        this.$on('new-code', (code) => {
+            this.coder.setValue(code)
         })
-    },
-    watch: {
-        'edit.code': function (val) {
-            if (this.coder) {
-                this.coder.setValue(val)
-            }
-        }
+        this.coder.on("change", () => {
+            this.$emit('code-change', this.coder.getValue())
+        })
     }
 }
 </script>

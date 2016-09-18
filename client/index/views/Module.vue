@@ -92,7 +92,7 @@
                 </ul>
             </div>
         </div>
-        <module-edit :edit="edit" :save-action="saveAction" :clear-edit="clearEdit"></module-edit>
+        <module-edit ref="moduleEdit" :edit="edit" :save-action="saveAction" :clear-edit="clearEdit"></module-edit>
         <!-- <div class="module-edit">
             <div class="card-title">
                 <div class="module-edit-title-box">
@@ -135,6 +135,7 @@ export default {
             this.edit.current = item
             this.edit.code = this.edit.current.get('code')
             this.edit.title = this.edit.current.get('title')
+            this.$refs.moduleEdit.$emit('module-switch')
         },
         clearEdit () {
             this.edit.current = null

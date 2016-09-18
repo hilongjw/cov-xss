@@ -52,7 +52,10 @@
             </div>
         </div>
         <div class="module-edit-content">
-            <code-editor :edit="edit"></code-editor>
+            <code-editor
+                @code-change="codeChange"
+                ref="codeEditor"
+            ></code-editor>
         </div>
     </div>
 </template>
@@ -60,11 +63,6 @@
 <script>
 import CodeEditor from './CodeEditor.vue'
 export default {
-    data () {
-        return {
-            editor: null
-        }
-    },
     props: {
         edit: Object,
         clearEdit: Function,
@@ -72,6 +70,19 @@ export default {
     },
     components: {
         CodeEditor
+    },
+    mounted () {
+        this.$on('module-switch', () => {
+            this.newCode(this.edit.code)
+        })
+    },
+    methods: {
+        codeChange (code) {
+            this.edit.code = code
+        },
+        newCode (code) {
+            this.$refs.codeEditor.$emit('new-code', code)
+        }
     }
 }
 </script>
