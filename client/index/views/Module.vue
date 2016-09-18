@@ -83,6 +83,7 @@
                         <div class="item-other">
                             <div class="item-quote">
                                 <span class="module-tag">JS</span>
+                                <span class="module-author"> {{item.get('creator').get('username')}}</span>
                             </div>
                             <div class="item-date">
                                 {{item.updatedAt | timeAgo}}
@@ -93,20 +94,6 @@
             </div>
         </div>
         <module-edit ref="moduleEdit" :edit="edit" :save-action="saveAction" :clear-edit="clearEdit"></module-edit>
-        <!-- <div class="module-edit">
-            <div class="card-title">
-                <div class="module-edit-title-box">
-                    <input type="text" placeholder="模块标题" class="module-edit-title" v-model="edit.title">   
-                </div>
-                <div class="module-edit-action">
-                    <button class="card-title-btn common" @click="clearEdit" v-show="edit.current">取消编辑</button>
-                    <button class="card-title-btn" :class="{ 'disable': (!edit.title || !edit.code) }" @click="saveAction">{{edit.current ? '保存' : '创建'}}</button>
-                </div>
-            </div>
-            <div class="module-edit-content">
-                <textarea class="module-edit-textarea" v-model="edit.code"></textarea>
-            </div>
-        </div> -->
     </div>
 </template>
 

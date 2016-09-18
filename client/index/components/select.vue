@@ -36,6 +36,7 @@
         box-shadow: 0 0 1rem #ccc;
         max-height: 18rem;
         overflow-y: auto;
+        z-index: 5;
     }
     .select-option-item {
         position: relative;
@@ -50,6 +51,7 @@
     .select-option-item-icon {
         position: absolute;
         right: 1rem;
+        font-size: 1rem;
     }
 </style>
 <template>

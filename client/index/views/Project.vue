@@ -45,11 +45,16 @@
     padding: 0 .5rem;
     margin-bottom: 1rem;
     display: flex;
+    width: 100%;
+    word-break: break-all;
+    overflow: visible;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+    color: #333;
+    word-wrap: normal;
 }
 .text-row-title {
     min-width: 4rem;
-    font-size: 1rem;
-    line-height: 1.7rem;
     text-align: right;
     flex-shrink: 0;
     padding-right: 1rem;

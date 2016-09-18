@@ -53,14 +53,25 @@
     color: #ccc;
     box-sizing: border-box;
 }
+.data-log-title-right {
+    text-align: right;
+}
+.data-log-title-icon {
+    margin-left: 1rem;
+}
 </style>
 
 <template>
     <ul class="data-log-list">
         <li class="data-log-item" :class="{ 'open': logRow.__show }" v-for="logRow in dataLogList">
             <div class="data-log-item-title" @click="toggle(logRow)">
-                <span class="data-log-item-ip">IP :  {{logRow.get('ip')}}</span>
-                <span>时间 :  {{logRow.get('createdAt')}}</span>
+                <div class="data-log-title-left">
+                    <span class="data-log-item-ip">IP :  {{logRow.get('ip')}}</span>
+                </div>
+                <div class="data-log-title-right">
+                    <span>时间 :  {{logRow.get('createdAt')}}</span>
+                    <span class="ion-chevron-down data-log-title-icon"></span>
+                </div>
             </div>
             <div class="data-log-params" v-if="logRow.get('get')">
                 <object-view :obj="logRow.get('get')" title="get"></object-view>  

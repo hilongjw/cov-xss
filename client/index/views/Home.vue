@@ -79,7 +79,7 @@ export default {
             if (this.query.alias) {
                 query.equalTo('alias', this.query.alias)
             }
-            query.limit(10)
+            query.limit(20)
             query.descending('createdAt')
             return query
         },
@@ -121,7 +121,7 @@ export default {
                 .skip(this.dataLogList.length)
                 .find()
                 .then(list => {
-                    if (list.length < 10) {
+                    if (list.length < 20) {
                         this.state.noMore = true
                     }
                     this.$Progress.finished()
