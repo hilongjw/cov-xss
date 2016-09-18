@@ -1,7 +1,11 @@
 const CACHE_KEY_MAP = {
-    'alias': '__PROJECT__ALIAS',
+    'alias-code': '__ALIAS_TO_CODE',
+    'alias-user': '__ALIAS_TO_USER',
+    'alias-project': 'ALIAS_TO_PROJECT',
     'getParams': '__DATA__LOG__USER'
 }
+
+const mailSender = require('../push/mail').mailSender
 
 function cacheKey (key, type) {
     return CACHE_KEY_MAP[type] + key
@@ -11,8 +15,8 @@ function getByAlias (req, res) {
     if (!req.query.id) return res.end()
     const alias = req.query.id
 
-    if (LRUCache.has(cacheKey(alias, 'alias'))) {
-        return res.send(LRUCache.get(cacheKey(alias, 'alias')))
+    if (LRUCache.has(cacheKey(alias, 'alias-code'))) {
+        return res.send(LRUCache.get(cacheKey(alias, 'alias-code')))
     }
 
     const query = new AV.Query('Project')
@@ -22,7 +26,7 @@ function getByAlias (req, res) {
                 if (!project) {
                     res.end()
                 } else {
-                    LRUCache.set(cacheKey(alias, 'alias'), project.get('code'))
+                    LRUCache.set(cacheKey(alias, 'alias-code'), project.get('code'))
                     res.send(project.get('code'))
                 }
             })
@@ -37,7 +41,7 @@ function delAliasCache (req, res) {
         error: true,
         msg: 'id is must be required'
     })
-    LRUCache.del(cacheKey(req.query.id, 'alias'))
+    LRUCache.del(cacheKey(req.query.id, 'alias-code'))
     res.send({
         error: false
     })
@@ -49,17 +53,19 @@ function getParams (req, res) {
         msg: 'id is must be required'
     })
 
-    if (LRUCache.has(cacheKey(req.query.id, 'alias-user'))) {
-        return saveDataLog(req, res, LRUCache.get(cacheKey(req.query.id, 'alias-user')))
+    if (LRUCache.has(cacheKey(req.query.id, 'alias-user')) && LRUCache.has(cacheKey(req.query.id, 'alias-project'))) {
+        return saveDataLog(req, res, LRUCache.get(cacheKey(req.query.id, 'alias-user')), LRUCache.get(cacheKey(req.query.id, 'alias-project')))
     }
 
     const projectQuery = new AV.Query('Project')
     projectQuery.equalTo('alias', req.query.id)
+    projectQuery.include('creator')
     projectQuery.first()
         .then(project => {
             if (project) {
+                LRUCache.set(cacheKey(req.query.id, 'alias-project'), project)
                 LRUCache.set(cacheKey(req.query.id, 'alias-user'), project.get('creator'))
-                saveDataLog(req, res, project.get('creator'))
+                saveDataLog(req, res, project.get('creator'), project)
             } else {
                 res.send({
                     error: true,
@@ -70,7 +76,7 @@ function getParams (req, res) {
         
 }
 
-function saveDataLog (req, res, user) {
+function saveDataLog (req, res, user, project) {
     const DataLog = AV.Object.extend('DataLog')
     const dataLog = new DataLog()
 
@@ -101,6 +107,7 @@ function saveDataLog (req, res, user) {
     dataLog.setACL(acl)
 
     dataLog.save().then(log => {
+        mailSender(project.get('title') + ' 收到新纪录', '2333', user.get('email'))
         res.send({
             error: false
         })
@@ -119,17 +126,19 @@ function getScreenshot (req, res) {
         msg: 'file and id are must be required'
     })
 
-    if (LRUCache.has(cacheKey(req.body.id, 'alias-user'))) {
-        return saveScreenshot(req, res, LRUCache.get(cacheKey(req.body.id, 'alias-user')))
+    if (LRUCache.has(cacheKey(req.body.id, 'alias-user')) && LRUCache.has(cacheKey(req.body.id, 'alias-project'))) {
+        return saveScreenshot(req, res, LRUCache.get(cacheKey(req.body.id, 'alias-user')), LRUCache.get(cacheKey(req.body.id, 'alias-project')))
     }
 
     const projectQuery = new AV.Query('Project')
     projectQuery.equalTo('alias', req.body.id)
+    projectQuery.include('creator')
     projectQuery.first()
         .then(project => {
             if (project) {
+                LRUCache.set(cacheKey(req.body.id, 'alias-project'), project)
                 LRUCache.set(cacheKey(req.body.id, 'alias-user'), project.get('creator'))
-                saveScreenshot(req, res, project.get('creator'))
+                saveScreenshot(req, res, project.get('creator'), project)
             } else {
                 res.send({
                     error: true,
@@ -140,7 +149,7 @@ function getScreenshot (req, res) {
 
 }
 
-function saveScreenshot (req, res, user) {
+function saveScreenshot (req, res, user, project) {
     const data = { base64: req.body.file.substring(23) }
     const file = new AV.File('screenshot-' + (new Date()).getTime() + '.jpg', data)
 
@@ -161,6 +170,7 @@ function saveScreenshot (req, res, user) {
             return screenshot.save()
         })
         .then(sc => {
+            mailSender(project.get('title') + ' 收到新截图', 'xxx', user.get('email'))
             res.send({
                 error: false
             })
