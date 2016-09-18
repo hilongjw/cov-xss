@@ -65,13 +65,13 @@
             <span>{{user.get('username')}}</span>
         </div>
         <div class="dash-header-nav-item-pop" v-show="state.popShow">
-           <div class="dash-header-nav-user-action-row rd-col-24">
+            <div class="dash-header-nav-user-action-row">
                 <i class="ion-information-circled dash-header-nav-user-action-icon"></i> 消息
             </div>
-            <div class="dash-header-nav-user-action-row rd-col-24">
+            <router-link to="/setting" tag="div" class="dash-header-nav-user-action-row">
                 <i class="ion-gear-a dash-header-nav-user-action-icon"></i> 设置
-            </div>
-            <div class="dash-header-nav-user-action-row rd-col-24" @click="logOut">
+            </router-link>
+            <div class="dash-header-nav-user-action-row" @click="logOut">
                 <i class="ion-log-out dash-header-nav-user-action-icon"></i>
                 <span>退出</span>
             </div>

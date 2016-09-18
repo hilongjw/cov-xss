@@ -101,6 +101,7 @@
 import ModuleEdit from '../components/ModuleEdit.vue'
 
 export default {
+    name: 'Module',
     data () {
         return {
             list: [],

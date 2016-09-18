@@ -75,6 +75,7 @@ import ObjectView from '../components/ObjectView.vue'
 import html2canvas from 'html2canvas'
 
 export default {
+    name: 'Screenshot',
     data () {
         return {
             state: {

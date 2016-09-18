@@ -157,6 +157,7 @@ import CodeEditor from '../components/CodeEditor.vue'
 import MD5 from 'md5'
 
 export default {
+    name: 'Project',
     data () {
         return {
             serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,

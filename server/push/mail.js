@@ -1,7 +1,8 @@
 const mailConfig = require('../../config/pushConfig').mailConfig
 
 function mailSender (title, msg, receiver) {
-    console.log('sending mail')
+    if (receiver) return console.log('without receiver')
+
     const nodemailer = require('nodemailer')
     const smtpConfig = {
         host: 'smtp.163.com',
