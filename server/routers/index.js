@@ -17,13 +17,15 @@ const getScreenshot = require('./api').getScreenshot
 
 const removeModule = require('./module').removeModule
 
+const NODE_ENV = process.env.NODE_ENV || 'production'
+
 // views
 router.get('/', isLogin, function (req, res) {
-  res.render('index', { title: 'Cov XSS', bundle: 'index'})
+  res.render('index', { title: 'Cov XSS', bundle: 'index', env: NODE_ENV })
 })
 
 router.get('/login', function (req, res) {
-  res.render('login', { title: 'Login - Cov XSS', bundle: 'login'})
+  res.render('login', { title: 'Login - Cov XSS', bundle: 'login', env: NODE_ENV})
 })
 
 // login api
