@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import VueLazyload from 'vue-lazyload'
 
 import App from './App.vue'
 import router from './router'
@@ -16,6 +17,7 @@ window.AV = AV
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(VueLazyload, {})
 Vue.use(loadMore)
 Vue.use(plugins, store)
 

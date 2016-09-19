@@ -66,9 +66,8 @@
         ></span>
         <div 
             class="screenshot-box" 
-            :style="{
-                'background-image': `url(${screenshot.get('file').thumbnailURL(500, 1000)})`
-            }">
+            v-lazy:background-image="screenshot.get('file').thumbnailURL(500, 1000)"
+        >
         </div>
     </li>
     <div class="screenshot-list-state" v-show="state.loading" key="loading">
