@@ -15,7 +15,9 @@ const getByAlias = require('./api').getByAlias
 const delAliasCache = require('./api').delAliasCache
 const getScreenshot = require('./api').getScreenshot
 
+const removeModule = require('./module').removeModule
 
+// views
 router.get('/', isLogin, function (req, res) {
   res.render('index', { title: 'index', bundle: 'index'})
 })
@@ -38,5 +40,8 @@ router.all('/api/data', crossOrigin, blackCheck, getParams)
 
 //screenshot
 router.post('/api/screenshot', crossOrigin, blackCheck, getScreenshot)
+
+// module
+router.get('/dash/api/remove-module', isLogin, removeModule)
 
 module.exports = router

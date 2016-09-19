@@ -104,20 +104,14 @@
     display: flex;
     justify-content: space-between;
 }
-.module-tag {
-    border: 1px solid #FF9800;
-    color: #FF9800;
-    padding: .1rem .2rem;
-    margin-left: .2rem;
-}
 </style>
 
 <template>
     <div class="module-content">
         <div class="module-card">
             <div class="card-title">
-                <span>模块</span>
-                <button class="card-title-btn" @click="clearEdit">新增</button>
+                <span>公开模块</span>
+                <!-- <button class="card-title-btn" @click="clearEdit">新增</button> -->
             </div>
             <div class="card-content">
                 <ul class="module-list">
@@ -141,32 +135,20 @@
         <div class="module-edit">
             <div class="module-nav">
                 <div class="module-nav-item" :class="{ 'active': state.edit }" @click="moduleNav('edit')">代码</div>
-                <div class="module-nav-item" :class="{ 'active': !state.edit }" @click="moduleNav('setting')">设置</div>
+                <!-- <div class="module-nav-item">设置</div> -->
             </div>
             <module-edit 
-                ref="moduleEdit"
-                :can-edit="true" 
+                ref="moduleEdit" 
+                :can-edit="false"
                 :edit="edit" 
-                :save-action="saveAction" 
-                :clear-edit="clearEdit"
-                :show-setting="showSetting"
-                v-show="state.edit"
+                @fork-code="forkAction"
             ></module-edit>
-            <module-setting 
-                ref="moduleSetting" 
-                :edit="edit" 
-                :save-action="saveAction" 
-                :clear-edit="clearEdit"
-                v-if="!state.edit"
-            ></module-setting>
         </div>
-        
     </div>
 </template>
 
 <script>
 import ModuleEdit from '../components/ModuleEdit.vue'
-import ModuleSetting from '../components/ModuleSetting.vue'
 
 export default {
     name: 'Module',
@@ -187,8 +169,7 @@ export default {
         this.queryList()
     },
     components: {
-        ModuleEdit,
-        ModuleSetting
+        ModuleEdit
     },
     methods: {
         moduleNav (type) {
@@ -221,7 +202,7 @@ export default {
         queryList () {
             this.$Progress.start()
             const query = new AV.Query('Module')
-            query.equalTo('creator', AV.User.current())
+            query.equalTo('public', true)
             query.include('creator')
             query.find()
                 .then(list => {
@@ -232,9 +213,9 @@ export default {
                     this.$Progress.failed()
                 })
         },
-        saveAction () {
-            if (!this.edit.title || !this.edit.code) return
-            this.create(this.edit.title, this.edit.code, this.edit.current)
+        forkAction () {
+            if (!this.edit.current) return
+            this.create('fork_from_' + this.edit.current.get('title'), this.edit.current.get('code'), null)
         },
         create (title, code, current) {
             const Module = AV.Object.extend('Module')
@@ -250,7 +231,7 @@ export default {
             })
             .then(module => {
                 this.$Notify('success', title + ' 保存成功', '', 3000)
-                this.queryList()
+                // this.queryList()
             })
         }
     }

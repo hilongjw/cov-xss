@@ -112,6 +112,7 @@ export default {
             } else {
                 this.unSelectOption(null, item)
             }
+            this.$emit('update')
         },
         addRemoveList (item) {
             if (!this.select.remove.find(i => i === item)) {

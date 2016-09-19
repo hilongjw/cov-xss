@@ -121,9 +121,10 @@ header {
             </div>
             <nav class="nav-box">
                 <router-link to="/home">Home</router-link>
+                <router-link to="/screenshot">Screenshot</router-link>
                 <router-link to="/project">Project</router-link>
                 <router-link to="/module">Module</router-link>
-                <router-link to="/screenshot">Screenshot</router-link>
+                <router-link to="/store">Store</router-link>
             </nav>
             <nav-user></nav-user>
         </header>
