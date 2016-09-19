@@ -4,6 +4,7 @@
 }
 .data-log-view {
     width: 100%;
+    min-height: 100vh;
     background: #fff;
     margin-left: 1rem;
     box-shadow: 0 0 .5rem #d0d0d0;

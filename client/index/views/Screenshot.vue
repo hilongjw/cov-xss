@@ -23,6 +23,7 @@
     height: 0;
     background-size: cover;
     padding-bottom: 100%;
+    cursor: pointer;
 }
 .screenshot-list-state {
     width: 100%;

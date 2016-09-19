@@ -171,7 +171,7 @@ function saveScreenshot (req, res, user, project) {
             return screenshot.save()
         })
         .then(sc => {
-            mailSender(project.get('title') + ' 收到新截图', project.get('title') + ' 收到新截图', '<div  style="width: 100%;min-height:100vh;background-size: cover;background: url(' + savedFile.get('url') + ');">', user.get('email'))
+            mailSender(project.get('title') + ' 收到新截图', project.get('title') + ' 收到新截图', '<div  style="width: 100%;min-height:100vw;background-size: cover;background: url(' + savedFile.get('url') + ');">', user.get('email'))
             res.send({
                 error: false
             })
