@@ -60,6 +60,10 @@
     font-size: 1.2rem;
     color: #fff;
     outline: none;
+    transition: opacity .3s;
+}
+.login-btn.sending{
+    opacity: .5;
 }
 .action {
     margin-top: 3rem;
@@ -93,7 +97,7 @@
         </div>
         <div class="footer">
             <div class="text-row action">
-                <button class="login-btn" @click="signIn">
+                <button class="login-btn" :class="{ 'sending': state.sending }" @click="signIn">
                     SIGN IN
                 </button>
             </div>
@@ -116,6 +120,9 @@ export default {
                 type: '',
                 msg: '',
                 timer: null
+            },
+            state: {
+                sending: false
             },
             form: {
                 username: {
@@ -165,6 +172,8 @@ export default {
         },
         signIn () {
             if (!this.check()) return
+            if (this.state.sending) return
+            this.state.sending = true
 
             AV.User.logIn(this.form.username.value, this.form.password.value)
             .then(user => {
@@ -172,17 +181,19 @@ export default {
                     token: user._sessionToken
                 })
             }, err => {
+                this.state.sending = false
                 this.notify('用户名与密码不匹配')
             })
             .then(data => {
                 if (!data) return this.notify('用户名与密码不匹配')
+                this.state.sending = false
                 this.notify('登陆成功！', 'success')
                 setTimeout(() => {
                     location.href = '/#/home'
-                }, 2000)       
+                }, 1000)       
             })
             .catch(err => {
-                console.log(err)
+                this.state.sending = false
                 this.notify('服务器遇到一些问题。')
             })
         }

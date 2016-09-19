@@ -18,10 +18,24 @@ const state = {
             failedColor: 'red',
             height: '2px'
         }
+    },
+    Projects: [],
+    Modules: [],
+    PublicModules: [],
+    DataLog: {
+        state: {
+            noMore: false,
+            loading: false
+        },
+        query: {
+            alias: ''
+        },
+        list: []
     }
 }
 
 const mutations = {
+    // notification
     ADD_NOTIFICATION (state, { item }) {
         item['__key'] = (new Date()).getTime()
         state.Notifications.push(item)
@@ -29,6 +43,8 @@ const mutations = {
     REMOVE_NOTIFICATION (state, { item }) {
         state.Notifications.$remove(item)
     },
+
+    // progress bar
     SET_PROGRESS_BAR (state, { num }) {
         state.ProgressBar.options.show = true
         state.ProgressBar.options.canSuccess = true
@@ -48,10 +64,47 @@ const mutations = {
     SET_PROGRESS_TIMER (state, { timer }) {
         if (state.ProgressBar.timer) clearTimeout(state.ProgressBar.timer)
         state.ProgressBar.timer = timer
+    },
+
+    // project
+    SET_PROJECT_LIST (state, list) {
+        state.Projects = list
+    },
+    ADD_PROJECT_ITEM (state, item) {
+        state.Projects.push(item)
+    },
+    REMOVE_PROJECT_ITEM (state, item) {
+        state.Projects.$remove(item)
+    },
+
+    // Modules
+    SET_MODULE_LIST (state, list) {
+        state.Modules = list
+    },
+    ADD_MODULE_ITEM (state, list) {
+        state.Modules.push(item)
+    },
+    REMOVE_MODULE_ITEM (state, item) {
+        state.Modules.$remove(item)
+    },
+
+    // DataLogs
+    SET_DATA_LOG (state, list) {
+        state.DataLogs = list
+    },
+    ADD_DATA_LOG (state, item) {
+        state.DataLogs.push(list)
+    },
+    ADD_DATA_LOG_LIST (state, list) {
+        state.DataLogs = state.DataLogs.concat(list)
+    },
+    REMOVE_DATA_LOG (state, item) {
+        state.DataLogs.$remove(list)
     }
 }
 
 const actions = {
+    // notification
     addNotification: ({ commit }, payload) => {
         commit('ADD_NOTIFICATION', payload)
         setTimeout(() => {
@@ -59,6 +112,8 @@ const actions = {
         }, payload.item.delay)
     },
     removeNotification: ({ commit }, payload) => commit('REMOVE_NOTIFICATION', payload),
+
+    // progress bar
     startProgressBar ({ commit, state }, { time }) {
         if (!time) time = 3000
         commit('SET_PROGRESS_BAR', { num: 0 })
@@ -76,6 +131,49 @@ const actions = {
     },
     endProgressBar ({ commit }, { success }) {
         commit('HIDE_PROGRESS_BAR', success)
+    },
+
+    // Project
+    loadProjectList ({ commit, dispatch }) {
+        dispatch('startProgressBar', {})
+        const query = new AV.Query('Project')
+        query.equalTo('creator', AV.User.current())
+        query.include('creator')
+        query.include('Module')
+        query.descending('updatedAt')
+        query.find()
+            .then(list => {
+                commit('SET_PROJECT_LIST', list)
+                dispatch('endProgressBar', {
+                    success: true
+                })
+            })
+            .catch(err => {
+                dispatch('endProgressBar', {
+                    success: false
+                })
+            })
+    },
+
+    // Modules
+    loadModuleList ({ commit, dispatch }) {
+        dispatch('startProgressBar', {})
+        const query = new AV.Query('Module')
+        query.equalTo('creator', AV.User.current())
+        query.include('creator')
+        query.descending('updatedAt')
+        query.find()
+            .then(list => {
+                commit('SET_MODULE_LIST', list)
+                dispatch('endProgressBar', {
+                    success: true
+                })
+            })
+            .catch(err => {
+                dispatch('endProgressBar', {
+                    success: false
+                })
+            })
     }
 }
 

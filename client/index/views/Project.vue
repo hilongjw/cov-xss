@@ -4,6 +4,7 @@
 }
 .project-view {
     width: 100%;
+    min-height: calc(100vh - 6rem);
     background: #fff;
     margin-left: 1rem;
     box-shadow: 0 0 .5rem #d0d0d0;
@@ -68,7 +69,7 @@
     width: 100%;
 }
 .code-block {
-    background: #ececec;
+    color: #fff;
     padding: .5rem 1rem;
     font-size: .8rem;
     margin-bottom: 1rem;
@@ -161,7 +162,7 @@ export default {
     data () {
         return {
             serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
-            list: [],
+            // list: [],
             followCode: {
                 code: ''
             },
@@ -183,7 +184,9 @@ export default {
         }
     },
     mounted () {
-        this.queryList()
+        if (!this.list.length) {
+            this.$store.dispatch('loadProjectList')
+        }
         this.queryModule()
     },
     components: {
@@ -191,6 +194,11 @@ export default {
         ProjectList,
         ColorPicker,
         CodeEditor
+    },
+    computed: {
+        list () {
+            return this.$store.state.Projects
+        }
     },
     methods: {
         codeChange (code) {
@@ -234,16 +242,6 @@ export default {
                     })
             })
             
-        },
-        queryList () {
-            const query = new AV.Query('Project')
-            query.equalTo('creator', AV.User.current())
-            query.include('creator')
-            query.include('Module')
-            query.find()
-                .then(list => {
-                    this.list = list
-                })
         },
         queryModule (cb) {
             this.select.value = []
@@ -331,7 +329,7 @@ export default {
             })
             .then(project => {
                 this.edit.alias = alias
-                this.queryList()
+                this.$store.dispatch('loadProjectList')
                 this.delCache(alias)
                 this.$Notify('success', title + ' 保存成功', '', 3000)
             })

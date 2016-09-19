@@ -2,35 +2,6 @@
 .screenshot-content {
     display: flex;
 }
-.screenshot-list {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-}
-.screenshot-item {
-    position: relative;
-    width: 32.333333%;
-    background: #fff;
-    padding: .5rem;
-    box-shadow: 0 0 1rem #ccc;
-    margin: .5%;
-    box-sizing: border-box;
-    text-align: center;
-}
-.screenshot-box {
-    height: 0;
-    background-size: cover;
-    padding-bottom: 100%;
-    cursor: pointer;
-}
-.screenshot-list-state {
-    width: 100%;
-    padding: 1rem;
-    text-align: center;
-    color: #ccc;
-}
 </style>
 
 <template>
@@ -42,29 +13,15 @@
                     截图
                 </div>
                 <div class="data-log-action">
-                    <!-- <button class="card-title-btn" @click="saveAction">保存</button> -->
+                    <button class="card-title-btn" @click="contrlAction">{{ state.contrl ? '完成' : '管理' }}</button>
                 </div>
             </div>
             <div class="module-edit-content" v-load-more="{ method: loadMoreScreenshot }">
-                <ul class="screenshot-list">
-                    <li class="screenshot-item" v-for="screenshot in screenshotList" @click="openRaw(screenshot)">
-                        <div 
-                            class="screenshot-box" 
-                            :style="{
-                                'background-image': `url(${screenshot.get('file').thumbnailURL(500, 1000)})`
-                            }">
-                        </div>
-                    </li>
-                    <div class="screenshot-list-state" v-show="state.loading">
-                        加载中
-                    </div>
-                    <div class="screenshot-list-state" v-if="!screenshotList.length">
-                        这里什么都没有
-                    </div>
-                    <div class="screenshot-list-state" v-if="state.noMore">
-                        已全部加载
-                    </div>
-                </ul>
+                <screenshot-list 
+                    :state="state" 
+                    :screenshot-list="screenshotList"
+                    @remove="removeScreenshot"
+                ></screenshot-list>
             </div>
         </div>
     </div>
@@ -73,46 +30,46 @@
 <script>
 import ProjectList from '../components/projectList.vue'
 import ObjectView from '../components/ObjectView.vue'
-import html2canvas from 'html2canvas'
+import ScreenshotList from '../components/ScreenshotList.vue'
 
 export default {
     name: 'Screenshot',
     data () {
         return {
             state: {
+                contrl: false,
                 loading: false,
                 noMore: false
             },
             query: {
                 alias: ''
             },
-            list: [],
             screenshotList: []
         }
     },
     mounted () {
-        this.queryList()
+        if (!this.list.length) {
+            this.$store.dispatch('loadProjectList')
+        }
         this.queryScreenshot()
     },
     components: {
         ProjectList,
-        ObjectView
+        ObjectView,
+        ScreenshotList
+    },
+    computed: {
+        list () {
+            return this.$store.state.Projects
+        }
     },
     methods: {
+        contrlAction () {
+            this.state.contrl = !this.state.contrl
+        },
         showProject (item) {
             this.query.alias = item.get('alias')
             this.queryScreenshot()
-        },
-        queryList () {
-            const query = new AV.Query('Project')
-            query.equalTo('creator', AV.User.current())
-            query.include('creator')
-            query.include('Module')
-            query.descending('createdAt')
-            query.find()
-                .then(list => {
-                    this.list = list
-                })
         },
         genScreenshotQuery () {
             this.$Progress.start()
@@ -145,21 +102,21 @@ export default {
                     this.screenshotList = this.screenshotList.concat(list)
                 })
         },
-        openRaw (item) {
-            window.open(item.get('file').get('url'))
+        removeScreenshot (item) {
+            this.screenshotList.$remove(item)
         },
         test () {
-            html2canvas(document.body)
-            .then(canvas => {
-                let base64 = canvas.toDataURL('image/jpeg')
-                return this.$http.post('api/screenshot', {
-                    file: base64,
-                    id: '5f8f327fe17dcfab074f468ca1fe70e4'
-                })
-            })
-            .then(res => {
-                console.log(res.data)
-            })
+            // html2canvas(document.body)
+            // .then(canvas => {
+            //     let base64 = canvas.toDataURL('image/jpeg')
+            //     return this.$http.post('api/screenshot', {
+            //         file: base64,
+            //         id: '5f8f327fe17dcfab074f468ca1fe70e4'
+            //     })
+            // })
+            // .then(res => {
+            //     console.log(res.data)
+            // })
         }
     }
 } 

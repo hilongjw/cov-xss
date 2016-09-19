@@ -227,11 +227,11 @@ export default {
             current.save({
                 title: title,
                 code: code,
+                public: false,
                 creator: AV.User.current()
             })
             .then(module => {
                 this.$Notify('success', title + ' 保存成功', '', 3000)
-                // this.queryList()
             })
         }
     }

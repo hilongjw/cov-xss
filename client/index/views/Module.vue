@@ -36,6 +36,7 @@
     padding: 1rem;
     min-width: 4rem;
     text-align: center;
+    cursor: pointer;
 }
 .module-nav-item.active {
     color: #000;
@@ -58,7 +59,6 @@
     justify-content: space-between;
     font-size: 1.2rem;
     color: #545454;
-    margin-bottom: 1rem;
     padding: 1rem;
     line-height: 1.6rem;
 }
@@ -140,8 +140,15 @@
         </div>
         <div class="module-edit">
             <div class="module-nav">
-                <div class="module-nav-item" :class="{ 'active': state.edit }" @click="moduleNav('edit')">代码</div>
-                <div class="module-nav-item" :class="{ 'active': !state.edit }" @click="moduleNav('setting')">设置</div>
+                <div class="module-nav-item" :class="{ 'active': state.edit }" @click="moduleNav('edit')">
+                代码
+                </div>
+                <div 
+                    v-show="edit.current"
+                    class="module-nav-item" 
+                    :class="{ 'active': !state.edit }" 
+                    @click="moduleNav('setting')"
+                >设置</div>
             </div>
             <module-edit 
                 ref="moduleEdit"
@@ -155,8 +162,7 @@
             <module-setting 
                 ref="moduleSetting" 
                 :edit="edit" 
-                :save-action="saveAction" 
-                :clear-edit="clearEdit"
+                @removed="removeAction"
                 v-if="!state.edit"
             ></module-setting>
         </div>
@@ -175,7 +181,6 @@ export default {
             state: {
                 edit: true
             },
-            list: [],
             edit: {
                 current: null,
                 code: '',
@@ -184,11 +189,18 @@ export default {
         }
     },
     mounted () {
-        this.queryList()
+        if (!this.list.length) {
+            this.$store.dispatch('loadModuleList')
+        }
     },
     components: {
         ModuleEdit,
         ModuleSetting
+    },
+    computed: {
+        list () {
+            return this.$store.state.Modules
+        }
     },
     methods: {
         moduleNav (type) {
@@ -202,6 +214,12 @@ export default {
                     }
                     break
             }
+        },
+        removeAction (module) {
+            this.state.edit = true
+            this.clearEdit()
+            this.$store.dispatch('loadModuleList')
+            this.$refs.moduleEdit.$emit('module-switch')
         },
         showSetting () {
             this.state.edit = false
@@ -217,20 +235,6 @@ export default {
             this.edit.current = null
             this.edit.code = ''
             this.edit.title = ''
-        },
-        queryList () {
-            this.$Progress.start()
-            const query = new AV.Query('Module')
-            query.equalTo('creator', AV.User.current())
-            query.include('creator')
-            query.find()
-                .then(list => {
-                    this.$Progress.finished()
-                    this.list = list
-                })
-                .catch(err => {
-                    this.$Progress.failed()
-                })
         },
         saveAction () {
             if (!this.edit.title || !this.edit.code) return
@@ -250,7 +254,7 @@ export default {
             })
             .then(module => {
                 this.$Notify('success', title + ' 保存成功', '', 3000)
-                this.queryList()
+                this.$store.dispatch('loadModuleList')
             })
         }
     }

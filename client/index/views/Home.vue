@@ -61,18 +61,24 @@ export default {
             query: {
                 alias: ''
             },
-            list: [],
             dataLogList: []
         }
     },
     mounted () {
-        this.queryList()
+        if (!this.list.length) {
+            this.$store.dispatch('loadProjectList')
+        }
         this.queryDataLog()
     },
     components: {
         ProjectList,
         ObjectView,
         DataLog
+    },
+    computed: {
+        list () {
+            return this.$store.state.Projects
+        }
     },
     methods: {
         genDataLogQuery () {
@@ -87,17 +93,6 @@ export default {
         showProject (item) {
             this.query.alias = item.get('alias')
             this.queryDataLog()
-        },
-        queryList () {
-            const query = new AV.Query('Project')
-            query.equalTo('creator', AV.User.current())
-            query.include('creator')
-            query.include('Module')
-            query.descending('createdAt')
-            query.find()
-                .then(list => {
-                    this.list = list
-                })
         },
         queryDataLog () {
             this.$Progress.start()

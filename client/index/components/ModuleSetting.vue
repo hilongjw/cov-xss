@@ -1,6 +1,6 @@
 <style>
 .module-setting-content {
-    padding-top: 1rem;
+    padding-top: 2rem;
 }
 .module-setting-row {
     display: flex;
@@ -211,7 +211,11 @@ export default {
                 }
             })
             .then(res => {
-                console.log(res)
+                if (res.data.error) {
+                    return this.$Notify('failed','遇到了一些问题', '', 3000)
+                }
+                this.$Notify('success',' 删除成功', '', 3000)
+                this.$emit('removed', module)
             })
         },
         savePublicState () {

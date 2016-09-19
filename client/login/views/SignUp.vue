@@ -18,7 +18,7 @@
         </div>
         <div class="footer">
             <div class="text-row action">
-                <button class="login-btn" @click="signUp">
+                <button class="login-btn" :class="{ 'sending': state.sending }" @click="signUp">
                     SIGN UP
                 </button>
             </div>
@@ -41,6 +41,9 @@ export default {
                 type: '',
                 msg: '',
                 timer: null
+            },
+            state: {
+                sending: false
             },
             form: {
                 invitation: {
@@ -94,13 +97,15 @@ export default {
         },
         signUp () {
             if (!this.check()) return
-
+            if (this.state.sending) return
+            this.state.sending = true
             this.$http.post('/sign-up', {
                 username: this.form.username.value,
                 password: this.form.password.value,
                 invitation: this.form.invitation.value
             })
             .then(res => {
+                this.state.sending = false
                 let data = res.data
                 if (data.error) {
                     this.notify(data.msg)
@@ -108,10 +113,11 @@ export default {
                     this.notify(data.msg, 'success')
                     setTimeout(() => {
                         this.toggle()
-                    }, 2000)
+                    }, 500)
                 }
             })
             .catch(err => {
+                this.state.sending = false
                 this.notify('服务器遇到了一些问题...')
             })
         }
