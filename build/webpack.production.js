@@ -4,7 +4,7 @@ const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base')
 const getEntries = require('./getEntries')
 const cssRewriter = require('./css-rewriter')
-const cssnano = require('cssnano')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 baseConfig.vue.loaders = {
@@ -28,15 +28,20 @@ const productionConf = merge(baseConfig, {
                 warnings: false
             }
         }),
-        new cssRewriter({
-            processor: (code) => {
-                return new Promise((resolve, reject) => {
-                    cssnano.process(code).then(function (result) {
-                        resolve(result.css)
-                    })
-                })
-            }
+        new OptimizeCssAssetsPlugin({
+          cssProcessor: require('cssnano'),
+          cssProcessorOptions: { discardComments: {removeAll: true } },
+          canPrint: true
         }),
+        // new cssRewriter({
+        //     processor: (code) => {
+        //         return new Promise((resolve, reject) => {
+        //             cssnano.process(code).then(function (result) {
+        //                 resolve(result.css)
+        //             })
+        //         })
+        //     }
+        // }),
         new ExtractTextPlugin('css/[name].css')
     ]
 })
