@@ -25,8 +25,8 @@ router.get('/login', function (req, res) {
 })
 
 // login api
-router.post('/sign-up', signUp)
-router.post('/sign-in', signIn)
+router.post('/sign-up', blackCheck, signUp)
+router.post('/sign-in', blackCheck, signIn)
 router.post('/log-out', isLogin, logOut)
 
 // api

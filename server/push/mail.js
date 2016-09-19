@@ -1,7 +1,7 @@
 const mailConfig = require('../../config/pushConfig').mailConfig
 
-function mailSender (title, msg, receiver) {
-    if (receiver) return console.log('without receiver')
+function mailSender (title, msg, html, receiver) {
+    if (!receiver) return console.log('without receiver')
 
     const nodemailer = require('nodemailer')
     const smtpConfig = {
@@ -16,11 +16,11 @@ function mailSender (title, msg, receiver) {
     const transporter = nodemailer.createTransport(smtpConfig)
 
     var mailOptions = {
-        from: '"Cov XSS" <heysec2015@163.com>',
+        from: '"Cov XSS" <' + mailConfig.user + '>',
         to: receiver,
         subject: title,
         text: msg,
-        html: '<b>'+ msg  +'</b>'
+        html: '<b>' + html + '</b>'
     }
 
     transporter.sendMail(mailOptions, function(error, info){

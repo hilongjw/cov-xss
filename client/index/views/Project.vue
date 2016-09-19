@@ -275,7 +275,7 @@ export default {
             return MD5(raw)
         },
         inserParams (code, alias) {
-            return code.replace('{__projectId}', alias)
+            return code.replace(/{__projectId}/g, alias)
         },
         genCode (alias, modules) {
             let result = ''

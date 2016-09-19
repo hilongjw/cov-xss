@@ -107,7 +107,7 @@ function saveDataLog (req, res, user, project) {
     dataLog.setACL(acl)
 
     dataLog.save().then(log => {
-        mailSender(project.get('title') + ' 收到新纪录', '2333', user.get('email'))
+        mailSender(project.get('title') + ' 收到新纪录', 'IP: ' + dataLog.get('ip'), '<p>' + project.get('title') + ' 收到新纪录</p>', user.get('email'))
         res.send({
             error: false
         })
@@ -152,9 +152,10 @@ function getScreenshot (req, res) {
 function saveScreenshot (req, res, user, project) {
     const data = { base64: req.body.file.substring(23) }
     const file = new AV.File('screenshot-' + (new Date()).getTime() + '.jpg', data)
-
+    let savedFile = null
     file.save()
-        .then(savedFile => {
+        .then(file => {
+            savedFile = file
             const Screenshot = AV.Object.extend('Screenshot')
             const screenshot = new Screenshot()
 
@@ -170,7 +171,7 @@ function saveScreenshot (req, res, user, project) {
             return screenshot.save()
         })
         .then(sc => {
-            mailSender(project.get('title') + ' 收到新截图', 'xxx', user.get('email'))
+            mailSender(project.get('title') + ' 收到新截图', project.get('title') + ' 收到新截图', '<div  style="width: 100%;min-height:100vh;background-size: cover;background: url(' + savedFile.get('url') + ');">', user.get('email'))
             res.send({
                 error: false
             })
