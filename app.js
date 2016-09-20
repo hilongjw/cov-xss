@@ -2,9 +2,10 @@ const path = require('path')
 const http = require('http')
 const express = require('express')
 
+const LRU = require("lru-cache")
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const LRU = require("lru-cache")
+const compression = require('compression')
 
 const app = express()
 const AV = require('./config/config').AV
@@ -13,6 +14,7 @@ const NODE_ENV = process.env.NODE_ENV || 'production'
 const isDev = NODE_ENV === 'development'
 const SERVER_CONFIG = require('./config/config').SERVER_CONFIG[NODE_ENV]
 
+global.NODE_ENV = NODE_ENV
 global.AV = AV
 global.LRUCache = LRU({
     max: 500,
@@ -32,7 +34,7 @@ app.use(bodyParser.urlencoded({
     limit: '5mb',
     extended: true
 }))
-
+app.use(compression())
 app.use(session({
   secret: 'sakjfbasfusfjkasduiasfjknaskfbajnsf89asfasn234hb',
   resave: false,
