@@ -87,18 +87,26 @@ function signUp (req, res) {
 }
 
 function signIn (req, res) {
-    AV.User.become(req.body.token)
+    if (!req.body.username ||
+        !req.body.password) {
+        return  res.send({
+            error: true,
+            msg: 'some params is must required'
+        })
+    }
+
+    AV.User.logIn(req.body.username, req.body.password)
         .then(user => {
-            req.session.token = req.body.token
+            req.session.token = user._sessionToken
             req.session.user = user
             res.send({
-                error: false
+                error: false,
+                token: user._sessionToken
             })
-        })
-        .catch(err => {
+        }, err => {
             res.send({
                 error: true,
-                msg: '233'
+                msg: '用户名与密码不匹配'
             })
         })
 }

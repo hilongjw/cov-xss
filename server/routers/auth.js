@@ -6,7 +6,26 @@ function isLogin (req, res, next) {
     }
 }
 
+function sendCaveat (req) {
+    console.log(req.route.path)
+    switch(req.route.path) {
+        case '/code': 
+            console.log('code')
+            break;
+        case '/sign-in': 
+            console.log('sign-in')
+            break;
+        case '/sign-up': 
+            console.log('sign-up')
+            break;
+        default: 
+            console.log('unkown')
+            break;
+    }
+}
+
 function blackCheck (req, res, next) {
+    sendCaveat(req)
     if (BlackCache.has('__Black' + req.connection.remoteAddress)) {
         return res.status(500).end()
     }

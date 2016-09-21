@@ -176,27 +176,50 @@ export default {
             if (this.state.sending) return
             this.state.sending = true
 
-            AV.User.logIn(this.form.username.value, this.form.password.value)
-            .then(user => {
-                return this.$http.post('/sign-in', {
-                    token: user._sessionToken
-                })
-            }, err => {
-                this.state.sending = false
-                this.notify('用户名与密码不匹配')
+            this.$http.post('/sign-in', {
+                username: this.form.username.value,
+                password: this.form.password.value
             })
-            .then(data => {
-                if (!data) return this.notify('用户名与密码不匹配')
+            .then(res => {
                 this.state.sending = false
+                if (!res.data.error) {
+                    return AV.User.become(res.data.token)
+                } else {
+                    return Promise.reject(res.data.msg)
+                }
+            })
+            .then(() => {
                 this.notify('登陆成功！', 'success')
                 setTimeout(() => {
                     location.href = '/#/home'
-                }, 1000)       
+                }, 1000) 
             })
             .catch(err => {
                 this.state.sending = false
-                this.notify('服务器遇到一些问题。')
+                this.notify(err)
             })
+
+            // AV.User.logIn(this.form.username.value, this.form.password.value)
+            // .then(user => {
+            //     return this.$http.post('/sign-in', {
+            //         token: user._sessionToken
+            //     })
+            // }, err => {
+            //     this.state.sending = false
+            //     this.notify('用户名与密码不匹配')
+            // })
+            // .then(data => {
+            //     if (!data) return this.notify('用户名与密码不匹配')
+            //     this.state.sending = false
+            //     this.notify('登陆成功！', 'success')
+            //     setTimeout(() => {
+            //         location.href = '/#/home'
+            //     }, 1000)       
+            // })
+            // .catch(err => {
+            //     this.state.sending = false
+            //     this.notify('服务器遇到一些问题。')
+            // })
         }
     }
 }
