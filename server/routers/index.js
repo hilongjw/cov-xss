@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 const User = require('./user')
-const Auth = require('./auth')
+const Auth = require('../middleware/auth')
 const API = require('./api')
 const View = require('./view')
 const Module = require('./module')

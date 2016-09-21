@@ -1,4 +1,4 @@
-const Notification = require('./notification')
+const Notification = require('../service/notification')
 
 function isLogin (req, res, next) {
     if (req.session.token) {
