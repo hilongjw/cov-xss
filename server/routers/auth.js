@@ -1,3 +1,5 @@
+const Notification = require('./notification')
+
 function isLogin (req, res, next) {
     if (req.session.token) {
         next()
@@ -6,39 +8,35 @@ function isLogin (req, res, next) {
     }
 }
 
-function sendCaveat (req) {
-    console.log(req.route.path)
+function collectNotification (req) {
     switch(req.route.path) {
         case '/code': 
-            console.log('code')
+            Notification.codeNotify(req.query.id, 'failed', ' 代码接口 受到 IP: ' + req.connection.remoteAddress + ' 恶意请求')
             break;
-        case '/sign-in': 
-            console.log('sign-in')
-            break;
-        case '/sign-up': 
-            console.log('sign-up')
+        case '/api/data': 
+            Notification.codeNotify(req.query.id, 'failed', ' 数据接口 受到 IP: ' + req.connection.remoteAddress + ' 恶意请求')
             break;
         default: 
-            console.log('unkown')
+            console.log('Unkown', ' 受到 IP: ' + req.connection.remoteAddress + ' 恶意请求')
             break;
     }
 }
 
 function blackCheck (req, res, next) {
-    sendCaveat(req)
     if (BlackCache.has('__Black' + req.connection.remoteAddress)) {
         return res.status(500).end()
     }
     if (BlackCache.has('__Watch' + req.connection.remoteAddress)) {
         let log = BlackCache.get('__Watch' + req.connection.remoteAddress)
-        if (log.value < 0) {
+        if (log.value < 4) {
             BlackCache.del('__Watch' + req.connection.remoteAddress)
             BlackCache.set('__Black' + req.connection.remoteAddress, true)
+            collectNotification(req)
             res.status(500).send({msg: 'Something broke!'})
         } else {
             BlackCache.set('__Watch' + req.connection.remoteAddress, {
                 date: new Date(),
-                value: waveRank(log) + log.value
+                value: waveRank(log)
             })
             next()
         }
@@ -52,7 +50,8 @@ function blackCheck (req, res, next) {
 }
 
 function waveRank (log) {
-    return ((new Date().getTime() - log.date.getTime())) < 200 ? -1 : 1
+    if (log.value > 15) return 10
+    return log.value + (((new Date().getTime() - log.date.getTime())) < 200 ? - 1 : .5)
 }
 
 function crossOrigin (req, res, next) {

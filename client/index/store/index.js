@@ -36,11 +36,12 @@ const state = {
 
 const mutations = {
     // notification
-    ADD_NOTIFICATION (state, { item }) {
+    ADD_NOTIFICATION (state, item) {
+        console.log(item)
         item['__key'] = (new Date()).getTime()
         state.Notifications.push(item)
     },
-    REMOVE_NOTIFICATION (state, { item }) {
+    REMOVE_NOTIFICATION (state, item) {
         state.Notifications.$remove(item)
     },
 
@@ -105,13 +106,18 @@ const mutations = {
 
 const actions = {
     // notification
-    addNotification: ({ commit }, payload) => {
-        commit('ADD_NOTIFICATION', payload)
-        setTimeout(() => {
-            commit('REMOVE_NOTIFICATION', payload)
-        }, payload.item.delay)
+    addNotification: ({ commit }, item) => {
+        commit('ADD_NOTIFICATION', item)
+        if (item.delay !== -1) {
+            setTimeout(() => {
+                commit('REMOVE_NOTIFICATION', item)
+            }, item.delay)
+        }
     },
-    removeNotification: ({ commit }, payload) => commit('REMOVE_NOTIFICATION', payload),
+    removeNotification: ({ commit }, item) => {
+        commit('REMOVE_NOTIFICATION', item)
+        if (item.callback) item.callback()
+    },
 
     // progress bar
     startProgressBar ({ commit, state }, { time }) {

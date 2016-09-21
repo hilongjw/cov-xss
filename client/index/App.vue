@@ -148,6 +148,18 @@ export default {
         NavUser,
         ProgressBar,
         Notification
+    },
+    mounted () {
+        let query = new AV.Query('UserNotification')
+        query.equalTo('read', false)
+        query.find()
+            .then(noficaitons => {
+                noficaitons.forEach(noficaiton => {
+                    this.$Notify(noficaiton.get('type'), noficaiton.get('about'), noficaiton.get('content'), -1, () => {
+                        noficaiton.set('read', true).save()
+                    })
+                })
+            })
     }
 }
 </script>

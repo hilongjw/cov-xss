@@ -137,7 +137,7 @@ export default {
             return [ICON_MAP[item.type]]
         },
         closeItem (e, item) {
-            this.$store.dispatch('removeNotification', { item })
+            this.$store.dispatch('removeNotification', item)
         }
     }
 }

@@ -1,12 +1,12 @@
 exports.install = (Vue, store) => {
-    Vue.prototype.$Notify = (type, title, content, delay = 3000) => {
+    Vue.prototype.$Notify = (type, title, content, delay, callback) => {
+        if (delay !== -1) delay = 3000
         store.dispatch('addNotification', {
-            item: {
-                title: title,
-                type: type,
-                content: content,
-                delay: delay
-            }
+            title: title,
+            type: type,
+            content: content,
+            delay: delay,
+            callback: callback
         })
     }
     Vue.prototype.$Progress = {
