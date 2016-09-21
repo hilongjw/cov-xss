@@ -10,7 +10,7 @@ html, body {
 }
 body {
     height: 100vh;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 #app {
     min-height: 100%;

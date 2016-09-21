@@ -8,6 +8,10 @@ const SERVER_CONFIG = {
         ADDRESS: 'http://127.0.0.1',
         PORT: 8080
     },
+    development_backend: {
+        ADDRESS: 'http://127.0.0.1',
+        PORT: 8080
+    },
     production: {
         ADDRESS: 'http://xss.bood.in',
         PORT: 80
@@ -15,9 +19,9 @@ const SERVER_CONFIG = {
 }
 
 AV.init({
-  appId: APP_ID,
-  appKey: APP_KEY,
-  masterKey: MASTER_KEY
+    appId: APP_ID,
+    appKey: APP_KEY,
+    masterKey: MASTER_KEY
 })
 
 if (MASTER_KEY) {

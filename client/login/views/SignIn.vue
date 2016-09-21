@@ -27,6 +27,7 @@
 }
 .logo-box .logo {
     height: 3rem;
+    width: 3rem;
 }
 .content {
     position: relative;

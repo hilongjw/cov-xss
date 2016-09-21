@@ -1,4 +1,4 @@
-function removeModule (req, res) {
+function remove (req, res) {
     if (!req.query.id) return res.send({
         error: true,
         msg: 'module id is must be require'
@@ -34,4 +34,4 @@ function removeModule (req, res) {
         })
 }
 
-module.exports.removeModule = removeModule
+module.exports.remove = remove

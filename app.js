@@ -17,12 +17,14 @@ const SERVER_CONFIG = require('./config/config').SERVER_CONFIG[NODE_ENV]
 global.NODE_ENV = NODE_ENV
 global.AV = AV
 global.LRUCache = LRU({
-    max: 500,
-    length: function (n, key) { return n.length * 2 + key.length },
+    max: 1024 * 1024 * 50,
+    length: function (n, key) {
+        return n.length + key.length
+    },
     maxAge: 1000 * 60 * 60
 })
 global.BlackCache = LRU({
-    max: 100,
+    max: 1024 * 1024 * 5,
     maxAge: 1000 * 60 * 60
 })
 
@@ -51,8 +53,8 @@ app.use(router)
 
 if (isDev) {
     // local variables for all views
-    app.locals.env = NODE_ENV;
-    app.locals.reload = true;
+    app.locals.env = NODE_ENV
+    app.locals.reload = true
     
     // static assets served by webpack-dev-middleware & webpack-hot-middleware for development
     const webpack = require('webpack')
@@ -72,11 +74,9 @@ if (isDev) {
 
     app.use(webpackHotMiddleware(compiler))
 
-    const server = http.createServer(app)
-
     app.use(express.static(path.join(__dirname, 'public')))
 
-    server.listen(SERVER_CONFIG.PORT, function(){
+    app.listen(SERVER_CONFIG.PORT, function(){
         console.log('App (dev) is now running on PORT '+ SERVER_CONFIG.PORT +'!')
     })
 } else {

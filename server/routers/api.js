@@ -1,5 +1,5 @@
 const CACHE_KEY_MAP = {
-    'alias-code': '__ALIAS_TO_CODE',
+    'alias-code': '__A_T_C',
     'alias-user': '__ALIAS_TO_USER',
     'alias-project': 'ALIAS_TO_PROJECT',
     'getParams': '__DATA__LOG__USER'
@@ -11,7 +11,7 @@ function cacheKey (key, type) {
     return CACHE_KEY_MAP[type] + key
 }
 
-function getByAlias (req, res) {
+function getCodeByAlias (req, res) {
     if (!req.query.id) return res.end()
     const alias = req.query.id
 
@@ -26,17 +26,16 @@ function getByAlias (req, res) {
                 if (!project) {
                     res.end()
                 } else {
-                    LRUCache.set(cacheKey(alias, 'alias-code'), project.get('code'))
+                    LRUCache.set(cacheKey(alias, 'alias-code'), ';' + project.get('code'))
                     res.send(project.get('code'))
                 }
             })
             .catch(err => {
-                console.error('Error at getByAlias', err)
+                console.error('Error at getCodeByAlias', err)
             })
 }
 
 function delAliasCache (req, res) {
-    console.log(req.query)
     if (!req.query.id) return res.send({
         error: true,
         msg: 'id is must be required'
@@ -184,7 +183,7 @@ function saveScreenshot (req, res, user, project) {
         })
 }
 
-module.exports.getByAlias = getByAlias
+module.exports.getCodeByAlias = getCodeByAlias
 module.exports.delAliasCache = delAliasCache
 module.exports.getParams = getParams
 module.exports.getScreenshot = getScreenshot

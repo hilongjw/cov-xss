@@ -3,50 +3,36 @@ const net = require('net')
 const express = require('express')
 const router = express.Router()
 
-const signUp = require('./sign').signUp
-const signIn = require('./sign').signIn
-const logOut = require('./sign').logOut
-
-const isLogin = require('./auth').isLogin
-const blackCheck = require('./auth').blackCheck
-const crossOrigin = require('./auth').crossOrigin
-
-const getParams = require('./api').getParams
-const getByAlias = require('./api').getByAlias
-const delAliasCache = require('./api').delAliasCache
-const getScreenshot = require('./api').getScreenshot
-
-const removeModule = require('./module').removeModule
+const User = require('./user')
+const Auth = require('./auth')
+const API = require('./api')
+const Module = require('./module')
 
 // views
-router.get('/', isLogin, function (req, res) {
+router.get('/', Auth.isLogin, function (req, res) {
     res.render('index', { title: 'Cov XSS', bundle: 'index' })
 })
 
 router.get('/login', function (req, res) {
-    console.log(req.socket.remoteAddress)
-    console.log(req.socket.remotePort)
-    console.log(net.isIP(req.socket.remoteAddress))
-    // res.send({ a: 1})
     res.render('login', { title: 'Login - Cov XSS', bundle: 'login' })
 })
 
 // login api
-router.post('/sign-up', blackCheck, signUp)
-router.post('/sign-in', blackCheck, signIn)
-router.post('/log-out', isLogin, logOut)
+router.post('/sign-up', Auth.blackCheck, User.signUp)
+router.post('/sign-in', Auth.blackCheck, User.signIn)
+router.post('/log-out', Auth.isLogin, User.logOut)
 
 // api
-router.all('/code', blackCheck, getByAlias)
-router.get('/code/fresh', isLogin, delAliasCache)
+router.all('/code', Auth.blackCheck, API.getCodeByAlias)
+router.get('/code/fresh', Auth.isLogin, API.delAliasCache)
 
 // get params
-router.all('/api/data', crossOrigin, blackCheck, getParams)
+router.all('/api/data', Auth.crossOrigin, Auth.blackCheck, API.getParams)
 
 //screenshot
-router.post('/api/screenshot', crossOrigin, blackCheck, getScreenshot)
+router.post('/api/screenshot', Auth.crossOrigin, Auth.blackCheck, API.getScreenshot)
 
 // module
-router.get('/dash/api/remove-module', isLogin, removeModule)
+router.get('/dash/api/remove-module', Auth.isLogin, Module.remove)
 
 module.exports = router
