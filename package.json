@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "body-parser": "^1.15.2",
-    "ejs": "^2.5.2",
     "express": "^4.14.0",
     "express-session": "^1.14.1",
     "leancloud-storage": "^1.4.0",
@@ -19,6 +18,7 @@
     "multer": "^1.2.0",
     "nodemailer": "^2.6.0",
     "npm": "^3.10.7",
+    "pug": "^2.0.0-beta6",
     "vue": "^2.0.0-rc.6"
   },
   "devDependencies": {

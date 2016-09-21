@@ -1,21 +1,16 @@
 'use strict'
-const net = require('net')
 const express = require('express')
 const router = express.Router()
 
 const User = require('./user')
 const Auth = require('./auth')
 const API = require('./api')
+const View = require('./view')
 const Module = require('./module')
 
 // views
-router.get('/', Auth.isLogin, function (req, res) {
-    res.render('index', { title: 'Cov XSS', bundle: 'index' })
-})
-
-router.get('/login', function (req, res) {
-    res.render('login', { title: 'Login - Cov XSS', bundle: 'login' })
-})
+router.get('/', Auth.isLogin, View.index)
+router.get('/login', View.login)
 
 // login api
 router.post('/sign-up', Auth.blackCheck, User.signUp)

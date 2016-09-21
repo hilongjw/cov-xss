@@ -29,7 +29,7 @@ global.BlackCache = LRU({
 })
 
 app.set('views', path.join(__dirname, 'server/views'))
-app.set('view engine', 'ejs')
+app.set('view engine', 'pug')
 app.enable('trust proxy')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
