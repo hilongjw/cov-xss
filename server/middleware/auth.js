@@ -23,6 +23,7 @@ function collectNotification (req) {
 }
 
 function blackCheck (req, res, next) {
+    console.log(req.ip, req.ips)
     if (BlackCache.has('__Black' + req.connection.remoteAddress)) {
         return res.status(500).end()
     }

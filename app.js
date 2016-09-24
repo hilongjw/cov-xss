@@ -30,7 +30,7 @@ global.BlackCache = LRU({
 
 app.set('views', path.join(__dirname, 'server/views'))
 app.set('view engine', 'pug')
-app.enable('trust proxy')
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal'])
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     limit: '5mb',
