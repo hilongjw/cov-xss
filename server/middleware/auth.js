@@ -25,6 +25,7 @@ function collectNotification (req) {
 function blackCheck (req, res, next) {
     let ip = req.ip
     if (!ip) return res.status(500).send({msg: 'Something broke!'})
+    console.log(ip)
     if (BlackCache.has('__Black' + ip)) {
         return res.status(500).end()
     }
