@@ -23,26 +23,27 @@ function collectNotification (req) {
 }
 
 function blackCheck (req, res, next) {
-    console.log(req.ip, req.ips)
-    if (BlackCache.has('__Black' + req.connection.remoteAddress)) {
+    let ip = req.ip
+    if (!ip) return res.status(500).send({msg: 'Something broke!'})
+    if (BlackCache.has('__Black' + ip)) {
         return res.status(500).end()
     }
-    if (BlackCache.has('__Watch' + req.connection.remoteAddress)) {
-        let log = BlackCache.get('__Watch' + req.connection.remoteAddress)
+    if (BlackCache.has('__Watch' + ip)) {
+        let log = BlackCache.get('__Watch' + ip)
         if (log.value < 4) {
-            BlackCache.del('__Watch' + req.connection.remoteAddress)
-            BlackCache.set('__Black' + req.connection.remoteAddress, true)
+            BlackCache.del('__Watch' + ip)
+            BlackCache.set('__Black' + ip, true)
             collectNotification(req)
             res.status(500).send({msg: 'Something broke!'})
         } else {
-            BlackCache.set('__Watch' + req.connection.remoteAddress, {
+            BlackCache.set('__Watch' + ip, {
                 date: new Date(),
                 value: waveRank(log)
             })
             next()
         }
     } else {
-        BlackCache.set('__Watch' + req.connection.remoteAddress, {
+        BlackCache.set('__Watch' + ip, {
             date: new Date(),
             value: 10
         })
