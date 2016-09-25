@@ -215,7 +215,8 @@ function newInvitation (req, res) {
             }
         })
         .then(data => {
-            return User.increment('inviteCount', -1).save()
+            User.set('inviteCount', User.get('inviteCount') - 1)
+            return User.save()
         })
         .then(data => {
             res.send({
