@@ -52,8 +52,9 @@
 
 <script>
 import Textfield from '../components/Textfield.vue'
+
 export default {
-    name: 'Home',
+    name: 'Setting',
     data () {
         return {
             form: {
@@ -67,8 +68,6 @@ export default {
                 }
             }
         }
-    },
-    mounted () {
     },
     components: {
         Textfield
@@ -85,7 +84,6 @@ export default {
                     this.$Notify('success', '保存成功', '', 3000)
                 })
                 .catch(err => {
-                    console.log(err)
                     this.$Notify('failed', '遇到了一些问题', '', 3000)
                 })
         }

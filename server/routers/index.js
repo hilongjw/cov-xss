@@ -20,6 +20,10 @@ router.post('/log-out', Auth.isLogin, User.logOut)
 // api
 router.all('/code', Auth.blackCheck, API.getCodeByAlias)
 router.get('/code/fresh', Auth.isLogin, API.delAliasCache)
+router.get('/new-invite', Auth.isLogin, API.newInvitation)
+
+// for HTTP benchmark
+// router.all('/code', API.getCodeByAlias)
 
 // get params
 router.all('/api/data', Auth.crossOrigin, Auth.blackCheck, API.getParams)

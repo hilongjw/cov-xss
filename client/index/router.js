@@ -6,6 +6,7 @@ import Project from './views/Project.vue'
 import Screenshot from './views/Screenshot.vue'
 import Setting from './views/Setting.vue'
 import ModuleStore from './views/ModuleStore.vue'
+import Invite from './views/Invite.vue'
 
 const router = new VueRouter({
     mode: 'hash',
@@ -18,7 +19,21 @@ const router = new VueRouter({
         { path: '/project', component: Project },
         { path: '/screenshot', component: Screenshot },
         { path: '/setting', component: Setting },
+        { 
+            path: '/invite',
+            component: Invite,
+            beforeEnter (route, redirect, next) {
+                // let user = router.app.$store.state.User
+                // if (!user) redirect({ path: '/home' })
+                // if (user.get('role') !== 'admin') {
+                //     redirect({ path: '/home' })
+                // } else {
+                        next()
+                // }
+            }
+        },
     ]
 })
+
 
 export default router

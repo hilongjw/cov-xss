@@ -151,7 +151,7 @@
 import ModuleEdit from '../components/ModuleEdit.vue'
 
 export default {
-    name: 'Module',
+    name: 'ModuleStore',
     data () {
         return {
             state: {

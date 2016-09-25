@@ -104,6 +104,7 @@ function signIn (req, res) {
                 token: user._sessionToken
             })
         }, err => {
+            console.log(err)
             res.send({
                 error: true,
                 msg: '用户名与密码不匹配'

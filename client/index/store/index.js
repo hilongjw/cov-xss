@@ -6,6 +6,9 @@ Vue.use(Vuex)
 
 const state = {
     User: AV.User.current(),
+    Role: {
+        text: ''
+    },
     Notifications: [],
     ProgressBar: {
         timer: null,
@@ -37,12 +40,16 @@ const state = {
 const mutations = {
     // notification
     ADD_NOTIFICATION (state, item) {
-        console.log(item)
         item['__key'] = (new Date()).getTime()
         state.Notifications.push(item)
     },
     REMOVE_NOTIFICATION (state, item) {
         state.Notifications.$remove(item)
+    },
+    // Role
+    SET_ROLE (state, { role, text }) {
+        state.Role.text = text
+        state.Role.data = role
     },
 
     // progress bar
@@ -105,6 +112,11 @@ const mutations = {
 }
 
 const actions = {
+    // set role
+    setUserRole ({ commit }, payload) {
+        commit('SET_ROLE', payload)
+    },
+
     // notification
     addNotification: ({ commit }, item) => {
         commit('ADD_NOTIFICATION', item)

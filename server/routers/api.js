@@ -12,11 +12,11 @@ function cacheKey (key, type) {
 }
 
 function getCodeByAlias (req, res) {
-    if (!req.query.id) return res.end()
+    if (!req.query.id) return res.status(400).end()
     const alias = req.query.id
 
     if (LRUCache.has(cacheKey(alias, 'alias-code'))) {
-        return res.send(LRUCache.get(cacheKey(alias, 'alias-code')))
+        return res.status(200).send(LRUCache.get(cacheKey(alias, 'alias-code')))
     }
 
     const query = new AV.Query('Project')
@@ -27,7 +27,7 @@ function getCodeByAlias (req, res) {
                     res.end()
                 } else {
                     LRUCache.set(cacheKey(alias, 'alias-code'), ';' + project.get('code'))
-                    res.send(project.get('code'))
+                    res.status(200).send(project.get('code'))
                 }
             })
             .catch(err => {
@@ -36,18 +36,18 @@ function getCodeByAlias (req, res) {
 }
 
 function delAliasCache (req, res) {
-    if (!req.query.id) return res.send({
+    if (!req.query.id) return res.status(400).send({
         error: true,
         msg: 'id is must be required'
     })
     LRUCache.del(cacheKey(req.query.id, 'alias-code'))
-    res.send({
+    res.status(200).send({
         error: false
     })
 }
 
 function getParams (req, res) {
-    if (!req.query.id) return res.send({
+    if (!req.query.id) return res.status(400).send({
         error: true,
         msg: 'id is must be required'
     })
@@ -183,7 +183,52 @@ function saveScreenshot (req, res, user, project) {
         })
 }
 
+function newInvitation (req, res) {
+    const userQuery = new AV.Query('_User')
+    const MD5 = require('md5')
+
+    let User = null
+
+    userQuery.get(req.session.user.objectId)
+        .then(user => {
+            User = user
+            if (user.get('inviteCount') > 0) {
+                const Invitation = AV.Object.extend('Invitation')
+                const invitation = new Invitation()
+                const acl = new AV.ACL()
+                acl.setPublicReadAccess(false)
+                acl.setPublicWriteAccess(false)
+                acl.setWriteAccess(user, false)
+                acl.setReadAccess(user, true)
+                invitation.setACL(acl)
+
+                return invitation.save({
+                    creator: user,
+                    code: MD5(Math.random() * (new Date()).getTime() + user.get('username') + user.get('updatedAt')),
+                    used: false
+                })
+            } else {
+                return Promise.reject({
+                    error: true,
+                    msg: '没有配额了'
+                })
+            }
+        })
+        .then(data => {
+            return User.increment('inviteCount', -1).save()
+        })
+        .then(data => {
+            res.send({
+                error: false
+            })
+        })
+        .catch(err => {
+            res.status(400).send(err)
+        })    
+}
+
 module.exports.getCodeByAlias = getCodeByAlias
 module.exports.delAliasCache = delAliasCache
 module.exports.getParams = getParams
 module.exports.getScreenshot = getScreenshot
+module.exports.newInvitation = newInvitation

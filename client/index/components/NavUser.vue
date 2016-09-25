@@ -64,10 +64,10 @@
         <div class="dash-header-nav-value" @click="toggle">
             <span>{{user.get('username')}}</span>
         </div>
-        <div class="dash-header-nav-item-pop" v-show="state.popShow">
-            <div class="dash-header-nav-user-action-row">
-                <i class="ion-information-circled dash-header-nav-user-action-icon"></i> 消息
-            </div>
+        <div class="dash-header-nav-item-pop" v-show="state.popShow" @click="toggle">
+            <router-link to="/invite" tag="div" class="dash-header-nav-user-action-row">
+                <i class="ion-information-circled dash-header-nav-user-action-icon"></i> 生成邀请码
+            </router-link>
             <router-link to="/setting" tag="div" class="dash-header-nav-user-action-row">
                 <i class="ion-gear-a dash-header-nav-user-action-icon"></i> 设置
             </router-link>
@@ -118,7 +118,7 @@ export default {
                     AV.User.logOut()
                     setTimeout(() => {
                         location.href = '/login'
-                    }, 2000) 
+                    }, 500) 
                 })
         }
     }
