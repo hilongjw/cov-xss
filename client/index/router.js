@@ -7,6 +7,7 @@ import Screenshot from './views/Screenshot.vue'
 import Setting from './views/Setting.vue'
 import ModuleStore from './views/ModuleStore.vue'
 import Invite from './views/Invite.vue'
+import Help from './views/Help.vue'
 
 const router = new VueRouter({
     mode: 'hash',
@@ -19,6 +20,7 @@ const router = new VueRouter({
         { path: '/project', component: Project },
         { path: '/screenshot', component: Screenshot },
         { path: '/setting', component: Setting },
+        { path: '/help', component: Help },
         { 
             path: '/invite',
             component: Invite,

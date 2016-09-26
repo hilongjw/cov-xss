@@ -1,5 +1,5 @@
 <style>
-.home-content {
+.invite-content {
     display: flex;
 }
 .invite-view {
@@ -21,10 +21,6 @@
     font-size: 1rem;
     padding: .2rem .5rem;
     width: 100%;
-}
-.invite-content {
-    height: calc(100% - 6rem);
-    padding: 0 1rem;
 }
 .invite-row {
     padding: 0 1rem;
@@ -62,7 +58,7 @@
 </style>
 
 <template>
-    <div class="home-content">
+    <div class="invite-content">
         <div class="invite-view">
             <div class="card-title">
                 <div class="invite-title-box">

@@ -11,13 +11,13 @@ function isLogin (req, res, next) {
 function collectNotification (req) {
     switch(req.route.path) {
         case '/code': 
-            Notification.codeNotify(req.query.id, 'failed', ' 代码接口 受到 IP: ' + req.connection.remoteAddress + ' 恶意请求')
+            Notification.codeNotify(req.query.id, 'failed', ' 代码接口 受到 IP: ' + req.ip + ' 恶意请求')
             break;
         case '/api/data': 
-            Notification.codeNotify(req.query.id, 'failed', ' 数据接口 受到 IP: ' + req.connection.remoteAddress + ' 恶意请求')
+            Notification.codeNotify(req.query.id, 'failed', ' 数据接口 受到 IP: ' + req.ip + ' 恶意请求')
             break;
         default: 
-            console.log('Unkown', ' 受到 IP: ' + req.connection.remoteAddress + ' 恶意请求')
+            console.log('Unkown', ' 受到 IP: ' + req.ip + ' 恶意请求')
             break;
     }
 }

@@ -54,6 +54,9 @@
     color: #333;
     word-wrap: normal;
 }
+.text-row.action .text-row-title{
+    line-height: 2rem;
+}
 .text-row-title {
     min-width: 4rem;
     text-align: right;
@@ -135,6 +138,12 @@
                             {{serverUrl + '/api/data?id=' + edit.alias}}
                         </a>
                     </p>
+                </div>
+                <div class="text-row action">
+                    <div class="text-row-title">如何使用?</div>
+                    <div>
+                        <router-link :to="'/help?alias=' + edit.alias" tag="button" class="card-title-btn">查看帮助</router-link>
+                    </div>
                 </div>
                 <div v-if="edit.alias">
                     <p class="code-block">

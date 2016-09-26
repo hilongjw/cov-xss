@@ -66,7 +66,7 @@
         </div>
         <div class="dash-header-nav-item-pop" v-show="state.popShow" @click="toggle">
             <router-link to="/invite" tag="div" class="dash-header-nav-user-action-row">
-                <i class="ion-information-circled dash-header-nav-user-action-icon"></i> 生成邀请码
+                <i class="ion-information-circled dash-header-nav-user-action-icon"></i> 邀请码
             </router-link>
             <router-link to="/setting" tag="div" class="dash-header-nav-user-action-row">
                 <i class="ion-gear-a dash-header-nav-user-action-icon"></i> 设置
