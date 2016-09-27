@@ -65,9 +65,6 @@ export default {
         }
     },
     mounted () {
-        if (!this.list.length) {
-            this.$store.dispatch('loadProjectList')
-        }
         this.queryDataLog()
     },
     components: {

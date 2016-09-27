@@ -8,6 +8,8 @@ const session = require('express-session')
 const compression = require('compression')
 
 const app = express()
+const server = require('http').Server(app)
+const io = require('./server/service/socket')(server)
 const AV = require('./config/config').AV
 const router = require('./server/routers/index')
 const NODE_ENV = process.env.NODE_ENV || 'production'
@@ -76,14 +78,15 @@ if (isDev) {
 
     app.use(express.static(path.join(__dirname, 'public')))
 
-    app.listen(SERVER_CONFIG.PORT, function(){
+    server.listen(SERVER_CONFIG.PORT, function(){
         console.log('App (dev) is now running on PORT '+ SERVER_CONFIG.PORT +'!')
     })
+
 } else {
     // static assets served by express.static() for production
     app.use(express.static(path.join(__dirname, 'public')))
     
-    app.listen(SERVER_CONFIG.PORT, function () {
+    server.listen(SERVER_CONFIG.PORT, function () {
         console.log('App (production) is now running on PORT '+ SERVER_CONFIG.PORT +'!')
     })
 }

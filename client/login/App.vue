@@ -16,17 +16,29 @@ body {
     min-height: 100%;
     background: linear-gradient(30deg, #53db9d, #46b9ae);
 }
-.in-out-translate-fade-enter-active, .in-out-translate-fade-leave-active {
+.left-enter-active,
+.left-leave-active,
+.right-enter-active,
+.right-leave-active {
   transition: all .5s;
 }
-.in-out-translate-fade-enter, .in-out-translate-fade-leave-active {
+.left-enter,
+.left-leave-active,
+.right-enter,
+.right-leave-active {
   opacity: 0;
 }
-.in-out-translate-fade-enter {
+.left-enter {
   transform: translate3d(100%, 0, 0);
 }
-.in-out-translate-fade-leave-active {
+.left-leave-active {
   transform: translate3d(-100%, 0, 0);
+}
+.right-enter {
+  transform: translate3d(-100%, 0, 0);
+}
+.right-leave-active {
+  transform: translate3d(100%, 0, 0);
 }
 @media all and (max-width: 768px) {
     body #app {
@@ -63,7 +75,7 @@ body {
 </style>
 <template>
     <div id="app">
-        <transition name="in-out-translate-fade" mode="out-in">
+        <transition :name="transitionName" mode="out-in">
             <sign-in v-if="state.signIn" @toggle="toggle"></sign-in>
             <sign-up v-else @toggle="toggle"></sign-up>
         </transition>
@@ -80,6 +92,11 @@ export default {
             state: {
                 signIn: true
             }
+        }
+    },
+    computed: {
+        transitionName () {
+            return this.state.signIn ? 'right' : 'left'
         }
     },
     components: {

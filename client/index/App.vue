@@ -121,6 +121,7 @@ header {
             </div>
             <nav class="nav-box">
                 <router-link to="/home">Home</router-link>
+                <router-link to="/run">Run</router-link>
                 <router-link to="/screenshot">Screenshot</router-link>
                 <router-link to="/project">Project</router-link>
                 <router-link to="/module">Module</router-link>
@@ -151,6 +152,7 @@ export default {
     },
     mounted () {
         this.queryNotification()
+        this.queryProject()
     },
     methods: {
         queryNotification () {
@@ -164,6 +166,9 @@ export default {
                         })
                     })
                 })
+        },
+        queryProject () {
+            this.$store.dispatch('loadProjectList')
         },
         queryUserRole () {
 

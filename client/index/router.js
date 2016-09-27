@@ -8,6 +8,7 @@ import Setting from './views/Setting.vue'
 import ModuleStore from './views/ModuleStore.vue'
 import Invite from './views/Invite.vue'
 import Help from './views/Help.vue'
+import Run from './views/Run.vue'
 
 const router = new VueRouter({
     mode: 'hash',
@@ -21,18 +22,10 @@ const router = new VueRouter({
         { path: '/screenshot', component: Screenshot },
         { path: '/setting', component: Setting },
         { path: '/help', component: Help },
+        { path: '/run', component: Run },
         { 
             path: '/invite',
-            component: Invite,
-            beforeEnter (route, redirect, next) {
-                // let user = router.app.$store.state.User
-                // if (!user) redirect({ path: '/home' })
-                // if (user.get('role') !== 'admin') {
-                //     redirect({ path: '/home' })
-                // } else {
-                        next()
-                // }
-            }
+            component: Invite
         },
     ]
 })

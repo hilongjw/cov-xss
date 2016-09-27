@@ -135,7 +135,6 @@
         <div class="module-edit">
             <div class="module-nav">
                 <div class="module-nav-item" :class="{ 'active': state.edit }" @click="moduleNav('edit')">代码</div>
-                <!-- <div class="module-nav-item">设置</div> -->
             </div>
             <module-edit 
                 ref="moduleEdit" 
@@ -172,21 +171,6 @@ export default {
         ModuleEdit
     },
     methods: {
-        moduleNav (type) {
-            switch (type) {
-                case 'edit':
-                    this.state.edit = true
-                    break
-                case 'setting':
-                    if (this.edit.current) {
-                        this.state.edit = false
-                    }
-                    break
-            }
-        },
-        showSetting () {
-            this.state.edit = false
-        },
         goEdit (item) {
             this.state.edit = true
             this.edit.current = item
@@ -194,16 +178,12 @@ export default {
             this.edit.title = this.edit.current.get('title')
             this.$refs.moduleEdit.$emit('module-switch')
         },
-        clearEdit () {
-            this.edit.current = null
-            this.edit.code = ''
-            this.edit.title = ''
-        },
         queryList () {
             this.$Progress.start()
             const query = new AV.Query('Module')
             query.equalTo('public', true)
             query.include('creator')
+            query.descending('updatedAt')
             query.find()
                 .then(list => {
                     this.$Progress.finished()
@@ -216,24 +196,6 @@ export default {
         forkAction () {
             if (!this.edit.current) return
             this.create('fork_from_' + this.edit.current.get('title'), this.edit.current.get('code'), null)
-        },
-        create (title, code, current) {
-            const Module = AV.Object.extend('Module')
-
-            if (!current) {
-                current = new Module()
-            }
-            
-            current.save({
-                title: title,
-                code: code,
-                public: false,
-                creator: AV.User.current()
-            })
-            .then(module => {
-                this.$store.dispatch('loadModuleList')
-                this.$Notify('success', title + ' 保存成功', '', 3000)
-            })
         }
     }
 } 

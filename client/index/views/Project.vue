@@ -193,9 +193,6 @@ export default {
         }
     },
     mounted () {
-        if (!this.list.length) {
-            this.$store.dispatch('loadProjectList')
-        }
         this.queryModule()
     },
     components: {
@@ -282,7 +279,6 @@ export default {
             return MD5(raw)
         },
         inserParams (code, alias) {
-            console.log(this.serverUrl)
             return code.replace(/{_siteUrl}/g, this.serverUrl).replace(/{_projectId}/g, alias)
         },
         genCode (alias, modules) {
