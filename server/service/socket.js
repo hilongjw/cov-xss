@@ -76,15 +76,16 @@ function socketInit (server) {
             query.find()
                 .then(projects => {
                     if (!projects.length) return
-                    console.log('new avaliable client')
                     let project = projects[0]
+                    let user = project.get('creator')
                     data['CID'] = socket.id
-                    data['UID'] = project.get('creator').id
+                    data['UID'] = user.id
                     data['project'] = project.get('title')
-                    clientData['UID'] = project.get('creator').id
+                    clientData['UID'] = user.id
 
                     POOL.Receiver.push(clientData)
-                    toSender(project.get('creator').id, 'new-client', data)
+                    toSender(user.id, 'new-client', data)
+                    mailSender(project.get('title') + ' 项目消息: 你的好友已上线', '你的好友已上线', '<p>你的好友已上线</p><p>TA 正在使用 ' + data.browser + ' 访问 ' + data.host + '</p><p>具体地址为：' + data.URL + '</p>', user.get('email'))
                 })
                 .catch(err => {
                     console.log(err)
