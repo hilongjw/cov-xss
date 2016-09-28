@@ -88,7 +88,7 @@ export default {
     data () {
         return {
             project:{
-                serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
+                serverUrl: window.location.origin,
                 alias: '23333'
             },
             payloads: [{

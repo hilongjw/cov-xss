@@ -48,8 +48,8 @@
 .exec-code-content .module-edit-textarea {
     border: none;
 }
-.exec-code-content .console-code {
-    /*border-top: 1px solid #ccc;*/
+.exec-code-box {
+    width: calc(100vw - 23rem);
 }
 .console-code .cm-s-material {
     background: #4a5961;
@@ -152,7 +152,6 @@ export default {
     methods: {
         initSender () {
             if (this.Sender) return
-            console.log(2333)
             this.Sender = io('/run-exec')
             this.Sender.emit('init-sender', {
                 TOKEN: AV.User.current()._sessionToken
@@ -161,7 +160,6 @@ export default {
                 this.clientList.push(data)
             })
             this.Sender.on('exec-code-result', (data) => {
-                // console.log('exec-code-result:', data)
                 this.newConsole(JSON.stringify(data))
             })
             this.Sender.on('die-client', CID => {
