@@ -22,6 +22,8 @@
     font-size: 1rem;
     padding: .2rem .5rem;
     width: 100%;
+    background: none;
+    color: #fff;
 }
 .module-nav {
     position: absolute;
@@ -29,7 +31,7 @@
     top: 0;
     display: flex;
     color: #969696;
-    box-shadow: 0 0 .5rem #eaeaea;
+    background: #fff;
 }
 .module-nav-item {
     font-size: 1rem;
@@ -39,8 +41,8 @@
     cursor: pointer;
 }
 .module-nav-item.active {
-    color: #000;
-    border-bottom: 2px solid #e6e6e6;
+    color: #4CAF50;
+    border-bottom: 2px solid #4CAF50;
 }
 .module-card {
     position: relative;
@@ -74,8 +76,8 @@
     outline: none;
 }
 .card-title-btn.common {
-    color: #777777;
-    border: 1px solid #777777;
+    color: #d6d6d6;
+    border: 1px solid #d6d6d6;
 }
 .card-title-btn.disable {
     color: #ccc;

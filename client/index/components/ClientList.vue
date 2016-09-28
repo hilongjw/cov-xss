@@ -67,7 +67,7 @@
     <div class="client-list-card">
         <div class="card-title">
             <span>客户端</span>
-            <button class="card-title-btn" v-if="backProject" @click="backProject">返回项目</button>
+            <!-- <button class="card-title-btn" v-if="backProject" @click="backProject">返回项目</button> -->
         </div>
         <div class="card-content">
             <ul class="client-list">
@@ -81,6 +81,7 @@
                     </div> 
                     <div class="item-other">
                         <div class="item-quote">
+                            <span class="module-tag">{{item.project}}</span>
                             <span class="module-tag">{{item.host}}</span>
                         </div>
                         <div class="item-date">

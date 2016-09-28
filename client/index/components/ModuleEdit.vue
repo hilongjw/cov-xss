@@ -1,10 +1,12 @@
 <style>
 .module-code {
     height: 100%;
+    padding-bottom: 4rem;
+    box-sizing: border-box;
 }
 .module-edit-content {
-    height: calc(100% - 6rem);
-    padding: 0 1rem;
+    height: 100%;
+    padding: 0;
 }
 .module-edit-action {
     text-align: right;
@@ -12,6 +14,15 @@
 }
 .module-edit-content .CodeMirror {
     height: 100%;
+    border: none;
+}
+.module-code .card-title{
+    margin: 0;
+    background: #263238;
+    color: #fff;
+}
+.module-code .module-edit-textarea  {
+    border: none;
 }
 </style>
 

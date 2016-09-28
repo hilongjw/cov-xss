@@ -53,6 +53,10 @@
     font-size: 12px;
     color: #333;
     word-wrap: normal;
+    box-sizing: border-box;
+}
+.text-row.action {
+    justify-content: flex-end;
 }
 .text-row.action .text-row-title{
     line-height: 2rem;

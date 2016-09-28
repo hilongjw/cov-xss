@@ -23,6 +23,9 @@
     padding-right: 1rem;
     margin-right: 1rem;
 }
+.exec-code-new-sub-title {
+    font-size: .8rem;
+}
 .exec-code-new-title {
     border: none;
     border-bottom: 1px solid #ccc;
@@ -45,46 +48,19 @@
 .exec-code-content .module-edit-textarea {
     border: none;
 }
-.in-out-translate-fade-enter-active, .in-out-translate-fade-leave-active {
-  transition: all .5s;
-}
-.in-out-translate-fade-enter, .in-out-translate-fade-leave-active {
-  opacity: 0;
-}
-.in-out-translate-fade-enter {
-  transform: translate3d(50%, 0, 0);
-}
-.in-out-translate-fade-leave-active {
-  transform: translate3d(-50%, 0, 0);
-}
-.out-in-translate-fade-enter-active, .out-in-translate-fade-leave-active {
-  transition: all .5s;
-}
-.out-in-translate-fade-enter, .out-in-translate-fade-leave-active {
-  opacity: 0;
-}
-.out-in-translate-fade-enter {
-  transform: translate3d(-50%, 0, 0);
-}
-.out-in-translate-fade-leave-active {
-  transform: translate3d(50%, 0, 0);
-}
 </style>
 
 <template>
     <div class="exec-code-content">
-        <transition :name="transitionName" mode="out-in">
-            <project-list v-if="state.showProject" :list="projectList" :show-project="showProject"></project-list>
-            <client-list v-else :list="clientList" :touch-client="touchClient" :back-project="showProjectList"></client-list>
-        </transition>
+        <client-list :list="clientList" :touch-client="touchClient" :back-project="showProjectList"></client-list>
         <div class="exec-code-new exec-code-view">
             <div class="card-title">
                 <div class="exec-code-new-title-box">
                     {{currentClient.browser}} 
+                    <span class="exec-code-new-sub-title">{{currentClient.project}} {{currentClient.host}}</span>
                 </div>
                 <div class="exec-code-new-action">
                     <button class="card-title-btn" @click="execAction">执行</button>
-                    <button class="card-title-btn" @click="listenAction">Listen</button>
                 </div>
             </div>
             <div class="exec-code-box">
@@ -134,16 +110,6 @@ export default {
             }
         }
     },
-    computed: {
-        transitionName () {
-            return this.state.showProject ? 'out-in-translate-fade' : 'in-out-translate-fade' 
-        },
-        projectList () {
-            return this.$store.state.Projects
-        }
-    },
-    mounted () {
-    },
     components: {
         covSelect,
         ClientList,
@@ -151,56 +117,16 @@ export default {
         CodeEditor,
         ProjectList
     },
+    mounted () {
+        this.initSender()
+    },
     methods: {
-        listenAction () {
-            var socket = io('http://localhost:8080/exec')
-            
-            // browser info 
-            navigator.sayswho= (function(){
-                var ua= navigator.userAgent, tem, 
-                M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-                if(/trident/i.test(M[1])){
-                    tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
-                    return 'IE '+(tem[1] || '');
-                }
-                if(M[1]=== 'Chrome'){
-                    tem= ua.match(/\b(OPR|Edge)\/(\d+)/);
-                    if(tem!= null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
-                }
-                M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-                if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
-                return M.join(' ');
-            })();
-
-            socket.on('code', function (data) {
-                var result = null
-                var err = null
-                try {
-                    result = eval(data.code)
-                } catch (e) {
-                    console.log(e)
-                    console.log(e.message)
-                    console.log(e.stack)
-                    err = {
-                        name: e.name,
-                        message: e.message
-                    }
-                }
-                socket.emit('exec-code-result', { error: err, result: result })
-            })
-            socket.emit('init-client', {
-                keyId: '2333',
-                host: document.location.host,
-                URL: document.URL,
-                browser: navigator.sayswho,
-                updatedAt: (new Date())
-            })
-        },
         initSender () {
             if (this.Sender) return
-            this.Sender = io('http://localhost:8080/run-exec')
+            console.log(2333)
+            this.Sender = io('/run-exec')
             this.Sender.emit('init-sender', {
-                keyId: this.sendConfig.keyId
+                TOKEN: AV.User.current()._sessionToken
             })
             this.Sender.on('new-client', (data) => {
                 this.clientList.push(data)
@@ -209,15 +135,15 @@ export default {
                 // console.log('exec-code-result:', data)
                 this.newConsole(JSON.stringify(data))
             })
-            this.Sender.on('die-client', cId => {
-                let willRemoveClient = this.clientList.find(c => c.cId === cId)
+            this.Sender.on('die-client', CID => {
+                let willRemoveClient = this.clientList.find(c => c.CID === CID)
                 this.clientList.$remove(willRemoveClient)
             })
         },
         execAction () {
             this.initSender()
             this.Sender.emit('run-code', {
-                cId: this.currentClient ? this.currentClient.cId : '', 
+                CID: this.currentClient.CID,
                 code: this.edit.code
             })
         },
