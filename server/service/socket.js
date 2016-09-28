@@ -68,6 +68,11 @@ function socketInit (server) {
                 data: data
             }
 
+            if (LRUCache.has(cacheKey(keyId, 'alias-user')) && LRUCache.has(cacheKey(keyId, 'alias-project'))) {
+                console.log('cached')
+                return initReceiver(socket, data, clientData, LRUCache.get(cacheKey(keyId, 'alias-project')), LRUCache.get(cacheKey(keyId, 'alias-user')))
+            }
+
             const query = new AV.Query('Project')
 
             query.equalTo('alias', keyId)
@@ -78,14 +83,10 @@ function socketInit (server) {
                     if (!projects.length) return
                     let project = projects[0]
                     let user = project.get('creator')
-                    data['CID'] = socket.id
-                    data['UID'] = user.id
-                    data['project'] = project.get('title')
-                    clientData['UID'] = user.id
-
-                    POOL.Receiver.push(clientData)
-                    toSender(user.id, 'new-client', data)
-                    mailSender(project.get('title') + ' 项目消息: 你的好友已上线', '你的好友已上线', '<p>你的好友已上线</p><p>TA 正在使用 ' + data.browser + ' 访问 ' + data.host + '</p><p>具体地址为：' + data.URL + '</p>', user.get('email'))
+                    console.log('no cache')
+                    LRUCache.set(cacheKey(keyId, 'alias-project'), project)
+                    LRUCache.set(cacheKey(keyId, 'alias-user'), project.get('creator'))
+                    initReceiver(socket, data, clientData, project, user)
                 })
                 .catch(err => {
                     console.log(err)
@@ -111,6 +112,22 @@ function socketInit (server) {
             })
         })
     })
+
+    function initReceiver (socket, data, clientData, project, user) {
+        data['CID'] = socket.id
+        data['UID'] = user.id
+        data['project'] = project.get('title')
+        clientData['UID'] = user.id
+
+        POOL.Receiver.push(clientData)
+        toSender(user.id, 'new-client', data)
+        mailSender(
+            project.get('title') + ' 项目消息: 你的好友已上线',
+            '你的好友已上线',
+            '<p>你的好友已上线</p><p>TA 正在使用 ' + data.browser + ' 访问 ' + data.host + '</p><p>具体地址为：' + data.URL + '</p>',
+            user.get('email')
+        )
+    }
 
     function toSender (UID, channel, data, mailNotify) {
         let sender = POOL.Senders.find(s => s.UID === UID)
