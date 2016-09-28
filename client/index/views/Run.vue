@@ -71,7 +71,7 @@
 
 <template>
     <div class="exec-code-content">
-        <client-list :list="clientList" :touch-client="touchClient" :back-project="showProjectList"></client-list>
+        <client-list :list="ClientList" :touch-client="touchClient" :back-project="showProjectList"></client-list>
         <div class="exec-code-new exec-code-view">
             <div class="card-title">
                 <div class="exec-code-new-title-box">
@@ -127,8 +127,7 @@ export default {
             },
             Sender: null,
             currentClient: {},
-            serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
-            clientList: [],
+            serverUrl: window.location.origin,
             edit: {
                 code: '',
                 console: '',
@@ -137,6 +136,11 @@ export default {
             sendConfig: {
                 keyId: ''
             }
+        }
+    },
+    computed: {
+        ClientList () {
+            return this.$store.state.ClientList
         }
     },
     components: {
@@ -152,19 +156,9 @@ export default {
     methods: {
         initSender () {
             if (this.Sender) return
-            this.Sender = io('/run-exec')
-            this.Sender.emit('init-sender', {
-                TOKEN: AV.User.current()._sessionToken
-            })
-            this.Sender.on('new-client', (data) => {
-                this.clientList.push(data)
-            })
+            this.Sender = window.Sender
             this.Sender.on('exec-code-result', (data) => {
                 this.newConsole(JSON.stringify(data))
-            })
-            this.Sender.on('die-client', CID => {
-                let willRemoveClient = this.clientList.find(c => c.CID === CID)
-                this.clientList.$remove(willRemoveClient)
             })
         },
         execAction () {

@@ -6,9 +6,7 @@ Vue.use(Vuex)
 
 const state = {
     User: AV.User.current(),
-    Role: {
-        text: ''
-    },
+    ClientList: [],
     Notifications: [],
     ProgressBar: {
         timer: null,
@@ -38,6 +36,15 @@ const state = {
 }
 
 const mutations = {
+    // runjs client
+    ADD_CLIENT (state, client) {
+        state.ClientList.push(client)
+    },
+    REMOVE_CLIENT (state, CID) {
+        let willRemoveClient = state.ClientList.find(c => c.CID === CID)
+        state.ClientList.$remove(willRemoveClient)
+    },
+
     // notification
     ADD_NOTIFICATION (state, item) {
         item['__key'] = (new Date()).getTime()
@@ -112,6 +119,14 @@ const mutations = {
 }
 
 const actions = {
+    // ClientList
+    addClient ({ commit }, client) {
+        commit('ADD_CLIENT', client)
+    },
+    removeClient ({ commit }, CID) {
+        commit('REMOVE_CLIENT', CID)
+    },
+
     // set role
     setUserRole ({ commit }, payload) {
         commit('SET_ROLE', payload)

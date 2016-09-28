@@ -139,6 +139,8 @@ import Notification from './components/Notification.vue'
 import ProgressBar from './components/ProgressBar.vue'
 import NavUser from './components/NavUser.vue'
 
+import io from 'socket.io-client'
+
 export default {
     computed: {
         user () {
@@ -150,9 +152,10 @@ export default {
         ProgressBar,
         Notification
     },
-    mounted () {
+    created () {
         this.queryNotification()
         this.queryProject()
+        this.initSocket()
     },
     methods: {
         queryNotification () {
@@ -172,6 +175,18 @@ export default {
         },
         queryUserRole () {
 
+        },
+        initSocket () {
+            window.Sender = io('/run-exec')
+            Sender.emit('init-sender', {
+                TOKEN: AV.User.current()._sessionToken
+            })
+            Sender.on('new-client', (data) => {
+                this.$store.dispatch('addClient', data)
+            })
+            Sender.on('die-client', CID => {
+                this.$store.dispatch('removeClient', CID)
+            })
         }
     }
 }
