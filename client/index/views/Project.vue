@@ -170,11 +170,12 @@ import ColorPicker from '../components/colorPicker.vue'
 import CodeEditor from '../components/CodeEditor.vue'
 import MD5 from 'md5'
 
+console.log()
 export default {
     name: 'Project',
     data () {
         return {
-            serverUrl: window.SERVER_CONFIG.ADDRESS + ':' + window.SERVER_CONFIG.PORT,
+            serverUrl: window.location.origin,
             // list: [],
             followCode: {
                 code: ''

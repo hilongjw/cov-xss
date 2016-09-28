@@ -48,6 +48,25 @@
 .exec-code-content .module-edit-textarea {
     border: none;
 }
+.exec-code-content .console-code {
+    /*border-top: 1px solid #ccc;*/
+}
+.console-code .cm-s-material {
+    background: #4a5961;
+}
+.console-code-title {
+    display: flex;
+    padding: .5rem 1rem;
+    background: #4a5961;
+}
+.console-code-title-box {
+    width: 100%;
+    color: #fff;
+    line-height: 2rem;
+}
+.console-code-action {
+    flex-shrink: 0;
+}
 </style>
 
 <template>
@@ -56,7 +75,7 @@
         <div class="exec-code-new exec-code-view">
             <div class="card-title">
                 <div class="exec-code-new-title-box">
-                    {{currentClient.browser}} 
+                    {{currentClient.browser ? currentClient.browser : '👈 先选择控制的客户端'}} 
                     <span class="exec-code-new-sub-title">{{currentClient.project}} {{currentClient.host}}</span>
                 </div>
                 <div class="exec-code-new-action">
@@ -69,11 +88,21 @@
                     @code-change="codeChange"
                     ref="codeEditor"
                 ></code-editor>
-                <code-editor 
-                    class=""
-                    @code-change="consoleChange"
-                    ref="consoleEditor"
-                ></code-editor>
+                <div class="console-code-box">
+                    <div class="console-code-title">
+                        <div class="console-code-title-box">
+                            result
+                        </div>
+                        <div class="console-code-action">
+                            <button class="card-title-btn" @click="clearConsole">清空</button>
+                        </div>
+                    </div>
+                    <code-editor 
+                        class="console-code"
+                        @code-change="consoleChange"
+                        ref="consoleEditor"
+                    ></code-editor>
+                </div>
             </div>
         </div>
     </div>
@@ -168,6 +197,9 @@ export default {
         },
         newConsole (code) {
             this.$refs.consoleEditor.$emit('new-code', this.edit.console + '\n' + code)
+        },
+        clearConsole () {
+            this.$refs.consoleEditor.$emit('new-code', '')
         },
         touchClient (item) {
             this.currentClient = item
