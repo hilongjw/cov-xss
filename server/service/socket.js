@@ -69,7 +69,6 @@ function socketInit (server) {
             }
 
             if (LRUCache.has(cacheKey(keyId, 'alias-user')) && LRUCache.has(cacheKey(keyId, 'alias-project'))) {
-                console.log('cached')
                 return initReceiver(socket, data, clientData, LRUCache.get(cacheKey(keyId, 'alias-project')), LRUCache.get(cacheKey(keyId, 'alias-user')))
             }
 
@@ -83,7 +82,6 @@ function socketInit (server) {
                     if (!projects.length) return
                     let project = projects[0]
                     let user = project.get('creator')
-                    console.log('no cache')
                     LRUCache.set(cacheKey(keyId, 'alias-project'), project)
                     LRUCache.set(cacheKey(keyId, 'alias-user'), project.get('creator'))
                     initReceiver(socket, data, clientData, project, user)
