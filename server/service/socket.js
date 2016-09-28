@@ -95,7 +95,7 @@ function socketInit (server) {
         socket.on('disconnect', () => {
             POOL.Receiver.forEach((item, index) => {
                 if (item.client === socket) {
-                    toSender(item.keyId, 'die-client', item.CID)
+                    toSender(item.UID, 'die-client', item.CID)
                     POOL.Receiver.splice(index, 1)
                 }
             })

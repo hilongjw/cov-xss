@@ -2,7 +2,7 @@
 <style>
 html, body {
     min-height: 100%;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: -apple-system,PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Helvetica Neue,sans-serif;
     -webkit-font-smoothing: antialiased;
 }
 * {
