@@ -7,6 +7,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import loadMore from './directives/loadMore'
+import Sticky from './directives/sticky'
 import * as filters from './filters/index'
 import plugins from './plugin'
 import { AV, SERVER_CONFIG } from '../../config/config'
@@ -19,6 +20,7 @@ Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(VueLazyload, {})
 Vue.use(loadMore)
+Vue.use(Sticky)
 Vue.use(plugins, store)
 
 Object.keys(filters).map(key => {

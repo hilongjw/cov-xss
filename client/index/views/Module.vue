@@ -112,11 +112,58 @@
     padding: .1rem .2rem;
     margin-left: .2rem;
 }
+.module-card {
+    padding: 4rem 0 0 0;
+}
+.module-card .card-title {
+    height: 2rem;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+.module-card .card-content {
+    overflow: auto;
+    height: 100%;
+}
+.module-card .card-content::-webkit-scrollbar {
+    width: 2px;
+    border-radius: 2px;
+}
+ 
+.module-card .card-content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+.module-card .card-content::-webkit-scrollbar-thumb {
+    background-color: #fdc8b7;
+}
+.module-content.sticky-test .module-card {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
+.module-content.sticky-test .module-card.sticky {
+    position: fixed;
+    top: 16px;
+    left: 1rem;
+    height: calc(100% - 2rem);
+}
+.module-content.sticky-test {
+    position: relative;
+    padding-left: 21rem;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+.module-content.sticky-test .module-edit {
+    width: 100%;
+}
 </style>
 
 <template>
-    <div class="module-content">
-        <div class="module-card">
+    <div class="module-content sticky-test">
+        <div class="module-card" v-sticky="10">
             <div class="card-title">
                 <span>模块</span>
                 <button class="card-title-btn" @click="clearEdit">新增</button>
