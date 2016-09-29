@@ -87,9 +87,7 @@ const newSticky = (el, binding, vnode) => {
 const Sticky = (Vue) => {
     Vue.directive('sticky', {
         bind: newSticky,
-        unbind (el, binding, vnode) {
-            ElementWillUnmount(el)
-        }
+        unbind: ElementWillUnmount
     })
 }
 

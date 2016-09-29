@@ -85,7 +85,7 @@ function saveDataLog (req, res, user, project) {
     if (req.body.cookie) {
         dataLog.set('cookie', req.body.cookie)
     }
-    dataLog.set('ip', req.connection.remoteAddress)
+    dataLog.set('ip', req.ip)
     dataLog.set('header', req.headers)
 
     // acl
