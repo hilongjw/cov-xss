@@ -89,6 +89,22 @@
                         </div>
                     </div>
                 </li>
+                <li 
+                    class="client-list-item" 
+                    v-if="!list.length" 
+                >
+                    <div class="item-title">
+                        没有在线的好友
+                    </div> 
+                    <div class="item-other">
+                        <div class="item-quote">
+                            <span class="module-tag"> 这里是为空的提示而已 </span>
+                        </div>
+                        <div class="item-date">
+                            刚刚
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

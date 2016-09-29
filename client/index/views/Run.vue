@@ -67,6 +67,23 @@
 .console-code-action {
     flex-shrink: 0;
 }
+@media all and (max-width: 768px) {
+    .exec-code-content {
+        display: block;
+    }
+    .exec-code-content .client-list-card {
+        width: 100%;
+    }
+    .exec-code-new {
+        margin: 0;
+    }
+    .exec-code-box {
+        width: 100%;
+    }
+    .exec-code-box .module-edit-textarea {
+        min-height: initial;
+    }
+}
 </style>
 
 <template>

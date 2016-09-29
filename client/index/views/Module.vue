@@ -159,6 +159,16 @@
 .module-content.sticky-test .module-edit {
     width: 100%;
 }
+@media all and (max-width: 768px) {
+    .module-content.sticky-test {
+        padding: 1rem;
+    }
+    .module-content.sticky-test .module-card {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+}
 </style>
 
 <template>

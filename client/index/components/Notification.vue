@@ -94,7 +94,7 @@
 }
 </style>
 <template>
-    <transition-group name="list" class="rd-notification-container" tag="div">
+    <transition-group name="list" class="rd-notification-container" tag="div" v-show="notifications.length">
         <div 
             v-for="item in notifications"
             class="rd-notification" 
