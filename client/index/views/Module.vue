@@ -168,6 +168,12 @@
         top: 0;
         left: 0;
     }
+    .module-content.sticky-test .module-card.sticky {
+        position: relative;
+        top: 0;
+        left: 0;
+        height: 100%;
+    }
 }
 </style>
 

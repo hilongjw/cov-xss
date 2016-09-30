@@ -205,7 +205,7 @@ export default {
         return {
             state: {
                 timer: null,
-                showMenu: true
+                showMenu: false
             }
         }
     },
@@ -223,6 +223,7 @@ export default {
         this.queryNotification()
         this.queryProject()
         this.initSocket()
+        this.resizeCheck()
         window.addEventListener('resize', this.resizeCheck)
     },
     methods: {
